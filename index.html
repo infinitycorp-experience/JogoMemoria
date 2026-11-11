@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Desafio Corporativo - Totem</title>
+    <title>Desafio Corporativo - INFINITYCORP</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -45,7 +45,7 @@
             width: 100%;
             height: 100%;
             max-width: 640px;
-            padding: 20px 16px;
+            padding: 16px 14px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -66,12 +66,12 @@
 
         .title {
             font-family: 'Rajdhani', sans-serif;
-            font-size: 3rem;
+            font-size: 2.8rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 2px;
             line-height: 1;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             background: linear-gradient(180deg, #fff, #94a3b8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -82,23 +82,23 @@
         .form-card {
             background: var(--surface);
             border: 1px solid var(--surface-border);
-            border-radius: 18px;
-            padding: 22px 18px;
+            border-radius: 16px;
+            padding: 16px 16px 10px 16px;
             width: 100%;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            margin: 16px 0;
+            margin: 10px 0;
         }
 
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 4px;
             text-align: left;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .form-group label {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 600;
             color: var(--accent);
             text-transform: uppercase;
@@ -107,12 +107,12 @@
 
         .form-input {
             width: 100%;
-            padding: 14px;
+            padding: 12px;
             border-radius: 10px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--surface-border);
             color: #fff;
-            font-size: 1rem;
+            font-size: 0.95rem;
             outline: none;
         }
 
@@ -129,14 +129,14 @@
             align-items: center;
             background: var(--surface);
             border: 1px solid var(--surface-border);
-            padding: 10px 18px;
+            padding: 8px 16px;
             border-radius: 14px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .timer-display {
             font-family: 'Rajdhani', sans-serif;
-            font-size: 2.8rem;
+            font-size: 2.6rem;
             font-weight: 700;
             letter-spacing: 2px;
             transition: color 0.3s ease;
@@ -156,13 +156,23 @@
             to { transform: scale(1.08); }
         }
 
+        /* Aviso de Memorização */
+        .memo-banner {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: blinkText 0.8s infinite;
+        }
+
         /* --- Grid 4x8 --- */
         .grid-container {
             flex: 1;
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             grid-template-rows: repeat(8, 1fr);
-            gap: 7px;
+            gap: 6px;
             width: 100%;
             perspective: 1000px;
         }
@@ -191,7 +201,7 @@
         }
 
         .card-back { background: linear-gradient(135deg, #162035, #0c1220); }
-        .card-back::after { content: "◆"; font-size: 1.2rem; color: var(--accent); opacity: 0.5; }
+        .card-back::after { content: "◆"; font-size: 1.1rem; color: var(--accent); opacity: 0.5; }
 
         .card-front { background: #ffffff; transform: rotateY(180deg); }
         .card-front img { width: 65%; height: 65%; object-fit: contain; }
@@ -218,10 +228,10 @@
             background: linear-gradient(135deg, var(--accent) 0%, #0066ff 100%);
             color: #040812;
             font-family: 'Rajdhani', sans-serif;
-            font-size: 1.3rem;
+            font-size: 1.25rem;
             font-weight: 700;
             border: none;
-            padding: 16px 24px;
+            padding: 14px 20px;
             border-radius: 12px;
             cursor: pointer;
             width: 100%;
@@ -230,39 +240,67 @@
             box-shadow: 0 8px 25px rgba(0, 229, 255, 0.3);
         }
 
-        /* --- Ranking & Premiações --- */
+        /* --- Rankings --- */
+        .ranking-container {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .ranking-title-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+            display: block;
+            text-align: center;
+        }
+
         .ranking-list {
-            margin: 12px 0;
             width: 100%;
             background: var(--surface);
             border-radius: 12px;
             border: 1px solid var(--surface-border);
-            max-height: 220px;
+            max-height: 160px;
             overflow-y: auto;
         }
 
         .ranking-item {
             display: flex;
             justify-content: space-between;
-            padding: 10px 14px;
+            align-items: center;
+            padding: 8px 12px;
             border-bottom: 1px solid var(--surface-border);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
-        .badge-prize {
-            padding: 8px 20px;
+        /* --- Badge de Premiação com SVG --- */
+        .badge-prize-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 10px 24px;
             border-radius: 50px;
             font-weight: 800;
-            font-size: 1rem;
+            font-size: 1.1rem;
             margin: 10px 0;
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
-        .prize-top { background: #ffd700; color: #000; box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); }
-        .prize-mid { background: #cbd5e1; color: #000; box-shadow: 0 0 15px rgba(203, 213, 225, 0.3); }
-        .prize-low { background: #cd7f32; color: #fff; box-shadow: 0 0 15px rgba(205, 127, 50, 0.3); }
-        .prize-none { background: #334155; color: #94a3b8; }
 
-        /* --- Screensaver / Proteção de Tela --- */
+        .badge-prize-box svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .prize-gold   { background: linear-gradient(135deg, #ffd700, #b8860b); color: #000; box-shadow: 0 0 25px rgba(255, 215, 0, 0.5); }
+        .prize-silver { background: linear-gradient(135deg, #e2e8f0, #94a3b8); color: #000; box-shadow: 0 0 20px rgba(226, 232, 240, 0.4); }
+        .prize-bronze { background: linear-gradient(135deg, #e69c24, #8c4a00); color: #fff; box-shadow: 0 0 20px rgba(205, 127, 50, 0.4); }
+        .prize-none   { background: #1e293b; color: #94a3b8; }
+
+        /* --- Screensaver / Standby --- */
         #screensaver {
             position: fixed;
             inset: 0;
@@ -333,31 +371,27 @@
 <!-- SCREENSAVER / STANDBY -->
 <div id="screensaver" onclick="dismissScreensaver()">
     <div class="screensaver-logo-box">
-        <!-- Substitua pelo logo da sua empresa -->
-        <h1 class="title" style="font-size: 3.5rem;">SUA MARCA</h1>
-        <p style="color: var(--accent); letter-spacing: 2px;">SOLUÇÕES EM TECNOLOGIA & OUTSOURCING</p>
+        <h1 class="title" style="font-size: 3.5rem;">INFINITYCORP</h1>
+        <p style="color: var(--accent); letter-spacing: 2px;">SOLUÇÕES CORPORATIVAS DE TI & OUTSOURCING</p>
     </div>
 
-    <!-- Amostra de Cards -->
     <div class="showcase-slider" id="showcase-slider"></div>
 
-    <!-- Mini Ranking na Tela de Descanso -->
-    <div style="width: 100%; max-width: 400px; text-align: center;">
-        <span style="font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px;">Melhores Tempos da Feira</span>
+    <div style="width: 100%; max-width: 420px; text-align: center;">
+        <span class="ranking-title-label">Melhores Tempos da Feira</span>
         <div class="ranking-list" id="screensaver-ranking"></div>
     </div>
 
-    <div class="touch-prompt">TOQUE NA TELA PARA INICIAR</div>
+    <div class="touch-prompt">TOQUE NA TELA PARA JOGAR</div>
 </div>
 
 <div class="totem-container">
 
-    <!-- TELA 1: CADASTRO -->
+    <!-- TELA 1: CADASTRO COM RANKING VISÍVEL -->
     <div id="screen-start" class="screen active">
-        <!-- 5 toques no título acionam o download da planilha CSV -->
         <h1 class="title" id="admin-export-trigger">INFINITYCORP</h1>
-        <p style="color: var(--text-dim); font-size: 0.9rem; text-align: center;">
-            Encontre os 16 pares em até 30s e ganhe prêmios.
+        <p style="color: var(--text-dim); font-size: 0.85rem; text-align: center;">
+            Desafio de 45s: memorize, conecte e conquiste sua premiação.
         </p>
 
         <div class="form-card">
@@ -376,16 +410,22 @@
         </div>
 
         <button class="btn-action" onclick="validateAndStart()">Iniciar Desafio</button>
+
+        <div class="ranking-container">
+            <span class="ranking-title-label">Líderes do Desafio</span>
+            <div class="ranking-list" id="start-ranking-list"></div>
+        </div>
     </div>
 
     <!-- TELA 2: TABULEIRO VERTICAL -->
     <div id="screen-game" class="screen">
         <div class="hud">
             <div>
-                <span style="font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; display: block;">Pares</span>
-                <strong id="matches-display" style="font-size: 1.3rem;">0 / 16</strong>
+                <span style="font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; display: block;">Pares</span>
+                <strong id="matches-display" style="font-size: 1.25rem;">0 / 16</strong>
             </div>
-            <div id="timer" class="timer-display timer-stage-green">00.0s</div>
+            <div id="memo-notice" class="memo-banner" style="display:none;">Memorize!</div>
+            <div id="timer" class="timer-display timer-stage-green">45.0s</div>
         </div>
 
         <div class="grid-container" id="grid"></div>
@@ -393,19 +433,25 @@
 
     <!-- TELA 3: RESULTADO -->
     <div id="screen-end" class="screen">
-        <h2 id="result-title" class="title" style="font-size: 2.2rem; margin-bottom: 2px;">Fim de Jogo</h2>
-        <div id="prize-badge" class="badge-prize">Sem Premiação</div>
-        <p id="result-summary" style="color: var(--text-dim); font-size: 0.85rem; margin-bottom: 6px; text-align: center;"></p>
+        <h2 id="result-title" class="title" style="font-size: 2rem; margin-bottom: 2px;">Fim de Jogo</h2>
+        <div id="prize-badge-box" class="badge-prize-box prize-none">
+            <span id="prize-icon"></span>
+            <span id="prize-text">Sem Premiação</span>
+        </div>
+        <p id="result-summary" style="color: var(--text-dim); font-size: 0.85rem; margin-bottom: 8px; text-align: center;"></p>
 
-        <div class="ranking-list" id="ranking-list"></div>
+        <div class="ranking-container" style="margin-top:0;">
+            <span class="ranking-title-label">Quadro Geral de Recordes</span>
+            <div class="ranking-list" id="end-ranking-list"></div>
+        </div>
 
-        <button class="btn-action" onclick="backToStart()">Próximo Participante</button>
+        <button class="btn-action" style="margin-top: 10px;" onclick="backToStart()">Próximo Participante</button>
     </div>
 
 </div>
 
 <script>
-    // Catálogo de Produtos (Substitua as URLs pelos caminhos locais: ex: "img/foto1.png")
+    // Catálogo de Produtos
     const CATALOG = [
         { name: "Impressora A4", img: "https://cdn-icons-png.flaticon.com/512/2888/2888707.png" },
         { name: "Multifuncional A3", img: "https://cdn-icons-png.flaticon.com/512/3059/3059489.png" },
@@ -425,9 +471,18 @@
         { name: "Firewall Appliance", img: "https://cdn-icons-png.flaticon.com/512/1006/1006771.png" }
     ];
 
+    // SVGs Vetoriais de Alta Definição
+    const ICONS = {
+        gold: `<svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6" fill="#ffd700"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>`,
+        silver: `<svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6" fill="#e2e8f0"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>`,
+        bronze: `<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6" fill="#cd7f32"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>`,
+        none: `<svg viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`
+    };
+
     const TOTAL_PAIRS = 16;
-    const TIME_LIMIT = 30.0;
-    const IDLE_TIMEOUT_SECONDS = 45; // Tempo de inatividade para screensaver
+    const TIME_LIMIT = 45.0; // 45 segundos
+    const PREVIEW_SECONDS = 2.5; // Preview inicial de 2.5s
+    const IDLE_TIMEOUT_SECONDS = 45;
 
     let currentPlayer = { name: '', company: '', email: '' };
     let cards = [];
@@ -442,12 +497,12 @@
     function setScreen(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
+        renderLeaderboards();
         resetIdleTimer();
     }
 
     function resetIdleTimer() {
         clearTimeout(idleTimer);
-        // Só entra em standby se estiver fora de uma partida em andamento
         const isPlaying = document.getElementById('screen-game').classList.contains('active');
         if (!isPlaying) {
             idleTimer = setTimeout(showScreensaver, IDLE_TIMEOUT_SECONDS * 1000);
@@ -456,30 +511,16 @@
 
     function showScreensaver() {
         const screensaver = document.getElementById('screensaver');
-        
-        // Amostra 3 produtos dinâmicos
         const slider = document.getElementById('showcase-slider');
         const samples = [...CATALOG].sort(() => 0.5 - Math.random()).slice(0, 3);
+
         slider.innerHTML = samples.map(p => `
             <div class="showcase-item">
                 <img src="${p.img}" alt="${p.name}">
             </div>
         `).join('');
 
-        // Exibe top 3 na tela de proteção
-        const ssList = document.getElementById('screensaver-ranking');
-        const ranking = JSON.parse(localStorage.getItem('totem_ranking') || '[]').slice(0, 3);
-        if (ranking.length > 0) {
-            ssList.innerHTML = ranking.map((r, i) => `
-                <div class="ranking-item">
-                    <span>#${i+1} ${r.name} (${r.company})</span>
-                    <strong style="color:var(--accent);">${r.time.toFixed(1)}s</strong>
-                </div>
-            `).join('');
-        } else {
-            ssList.innerHTML = '<div class="ranking-item" style="justify-content:center;">Seja o primeiro a bater o recorde!</div>';
-        }
-
+        renderLeaderboardIn('screensaver-ranking', 3);
         screensaver.classList.add('active');
     }
 
@@ -488,7 +529,6 @@
         backToStart();
     }
 
-    // Monitora toques na tela para resetar timer de inatividade
     ['click', 'touchstart', 'mousemove'].forEach(evt => {
         window.addEventListener(evt, resetIdleTimer, { passive: true });
     });
@@ -505,19 +545,16 @@
         }
 
         if (!email.includes('@') || !email.includes('.')) {
-            alert('Por favor, informe um e-mail válido.');
+            alert('Por favor, informe um e-mail corporativo válido.');
             return;
         }
 
         currentPlayer = { name, company, email };
-        
-        // Dispara e-mail de portfólio em segundo plano
         sendPortfolioEmail(currentPlayer);
-
         startGame();
     }
 
-    // Algoritmo Fisher-Yates (Embaralhamento Real)
+    // Algoritmo Fisher-Yates
     function shuffle(array) {
         let arr = [...array];
         for (let i = arr.length - 1; i > 0; i--) {
@@ -531,20 +568,27 @@
         setScreen('screen-game');
         matchedPairs = 0;
         flippedCards = [];
-        isBoardLocked = false;
         elapsedSeconds = 0.0;
+        isBoardLocked = true; // Bloqueado durante o preview inicial
 
         document.getElementById('matches-display').innerText = `0 / ${TOTAL_PAIRS}`;
-        updateTimerDisplay();
+        
+        const timerEl = document.getElementById('timer');
+        const memoEl = document.getElementById('memo-notice');
+        
+        timerEl.innerText = `${TIME_LIMIT.toFixed(1)}s`;
+        timerEl.className = 'timer-display timer-stage-green';
+        memoEl.style.display = 'block';
 
         cards = shuffle([...CATALOG, ...CATALOG]);
 
         const grid = document.getElementById('grid');
         grid.innerHTML = '';
 
+        // Cria cartas viradas para CIMA para o Preview de 2.5s
         cards.forEach((item, index) => {
             const card = document.createElement('div');
-            card.className = 'card';
+            card.className = 'card flipped';
             card.dataset.index = index;
             card.dataset.name = item.name;
 
@@ -560,32 +604,41 @@
             grid.appendChild(card);
         });
 
-        clearInterval(timerInterval);
-        timerInterval = setInterval(() => {
-            elapsedSeconds += 0.1;
-            updateTimerDisplay();
+        // Contagem regressiva do Preview Inicial
+        setTimeout(() => {
+            document.querySelectorAll('.card').forEach(c => c.classList.remove('flipped'));
+            memoEl.style.display = 'none';
+            isBoardLocked = false;
 
-            if (elapsedSeconds >= TIME_LIMIT) {
-                endGame(false);
-            }
-        }, 100);
+            // Inicia o cronômetro oficial de 45 segundos
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                elapsedSeconds += 0.1;
+                updateTimerDisplay();
+
+                if (elapsedSeconds >= TIME_LIMIT) {
+                    endGame();
+                }
+            }, 100);
+        }, PREVIEW_SECONDS * 2500);
     }
 
     function updateTimerDisplay() {
+        const remaining = Math.max(0, TIME_LIMIT - elapsedSeconds);
         const timerEl = document.getElementById('timer');
-        timerEl.innerText = `${elapsedSeconds.toFixed(1)}s`;
+        timerEl.innerText = `${remaining.toFixed(1)}s`;
 
+        // Regra de cores para 45 segundos:
+        // Até 15s decorridos: Verde | Até 30s: Azul | Até 38s: Amarelo | 38s em diante: Vermelho
         timerEl.className = 'timer-display';
-        if (elapsedSeconds <= 10.0) {
+        if (elapsedSeconds <= 15.0) {
             timerEl.classList.add('timer-stage-green');
-        } else if (elapsedSeconds <= 20.0) {
+        } else if (elapsedSeconds <= 30.0) {
             timerEl.classList.add('timer-stage-blue');
-        } else if (elapsedSeconds <= 24.0) {
+        } else if (elapsedSeconds <= 38.0) {
             timerEl.classList.add('timer-stage-yellow');
-        } else if (elapsedSeconds >= 28.0) {
-            timerEl.classList.add('timer-stage-red');
         } else {
-            timerEl.classList.add('timer-stage-yellow');
+            timerEl.classList.add('timer-stage-red');
         }
     }
 
@@ -613,7 +666,7 @@
             isBoardLocked = false;
 
             if (matchedPairs === TOTAL_PAIRS) {
-                endGame(true);
+                endGame();
             }
         } else {
             setTimeout(() => {
@@ -625,69 +678,87 @@
         }
     }
 
-    function endGame(victory) {
+    function endGame() {
         clearInterval(timerInterval);
         setScreen('screen-end');
 
         const title = document.getElementById('result-title');
-        const badge = document.getElementById('prize-badge');
+        const badgeBox = document.getElementById('prize-badge-box');
+        const iconSpan = document.getElementById('prize-icon');
+        const textSpan = document.getElementById('prize-text');
         const summary = document.getElementById('result-summary');
-        badge.className = 'badge-prize';
 
+        badgeBox.className = 'badge-prize-box';
         const finalTime = parseFloat(elapsedSeconds.toFixed(1));
+        const finishedAll = (matchedPairs === TOTAL_PAIRS);
 
-        if (!victory) {
-            title.innerText = "Tempo Esgotado!";
-            badge.innerText = "Sem Premiação";
-            badge.classList.add('prize-none');
-            summary.innerText = `${currentPlayer.name} (${currentPlayer.company}) - Limite de 30s atingido. Obrigado por ter participado da nossa brincadeira`;
-            saveRecord(finalTime, false);
+        // LÓGICA DE PREMIAÇÃO:
+        // 15 e 16 pares = Ouro | 12 a 14 = Prata | 8 a 11 = Bronze | < 8 = Sem premiação
+        if (matchedPairs >= 15) {
+            badgeBox.classList.add('prize-gold');
+            iconSpan.innerHTML = ICONS.gold;
+            textSpan.innerText = "Medalha de Ouro";
+        } else if (matchedPairs >= 12) {
+            badgeBox.classList.add('prize-silver');
+            iconSpan.innerHTML = ICONS.silver;
+            textSpan.innerText = "Medalha de Prata";
+        } else if (matchedPairs >= 8) {
+            badgeBox.classList.add('prize-bronze');
+            iconSpan.innerHTML = ICONS.bronze;
+            textSpan.innerText = "Medalha de Bronze";
         } else {
-            title.innerText = "Desafio Concluído!";
-            summary.innerText = `${currentPlayer.name} (${currentPlayer.company}) completou em ${finalTime}s. Parabéns!!!!`;
-
-            if (finalTime <= 18.0) {
-                badge.innerText = "🏆 Prêmio Top";
-                badge.classList.add('prize-top');
-            } else if (finalTime <= 24.0) {
-                badge.innerText = "🥈 Prêmio Intermediário";
-                badge.classList.add('prize-mid');
-            } else {
-                badge.innerText = "🥉 Prêmio Simples";
-                badge.classList.add('prize-low');
-            }
-
-            saveRecord(finalTime, true);
+            badgeBox.classList.add('prize-none');
+            iconSpan.innerHTML = ICONS.none;
+            textSpan.innerText = "Sem Premiação";
         }
 
-        renderLeaderboard();
+        if (finishedAll) {
+            title.innerText = "Desafio Concluído!";
+            summary.innerText = `${currentPlayer.name} (${currentPlayer.company}) - 16 Pares em ${finalTime}s. Parabéns!`;
+        } else {
+            title.innerText = "Tempo Encerrado!";
+            summary.innerText = `${currentPlayer.name} (${currentPlayer.company}) - Conquistou ${matchedPairs} de 16 pares em 45s.`;
+        }
+
+        saveRecord(finalTime, matchedPairs, finishedAll);
+        renderLeaderboards();
     }
 
     // --- ARMAZENAMENTO & EXPORTAÇÃO ---
-    function saveRecord(time, completed) {
+    function saveRecord(time, pairs, completed) {
         const list = JSON.parse(localStorage.getItem('totem_all_leads') || '[]');
         const entry = {
             name: currentPlayer.name,
             company: currentPlayer.company,
             email: currentPlayer.email,
             time: time,
+            pairs: pairs,
             completed: completed,
             date: new Date().toLocaleString('pt-BR')
         };
         list.push(entry);
         localStorage.setItem('totem_all_leads', JSON.stringify(list));
 
-        if (completed) {
-            const ranking = JSON.parse(localStorage.getItem('totem_ranking') || '[]');
-            ranking.push(entry);
-            ranking.sort((a, b) => a.time - b.time);
-            localStorage.setItem('totem_ranking', JSON.stringify(ranking.slice(0, 10)));
-        }
+        // Ranking focado em maior número de pares e menor tempo
+        const ranking = JSON.parse(localStorage.getItem('totem_ranking') || '[]');
+        ranking.push(entry);
+        ranking.sort((a, b) => {
+            if (b.pairs !== a.pairs) return b.pairs - a.pairs; // Mais pares primeiro
+            return a.time - b.time; // Desempate por menor tempo
+        });
+        localStorage.setItem('totem_ranking', JSON.stringify(ranking.slice(0, 15)));
     }
 
-    function renderLeaderboard() {
-        const listEl = document.getElementById('ranking-list');
-        const ranking = JSON.parse(localStorage.getItem('totem_ranking') || '[]');
+    function renderLeaderboards() {
+        renderLeaderboardIn('start-ranking-list', 10);
+        renderLeaderboardIn('end-ranking-list', 10);
+    }
+
+    function renderLeaderboardIn(elementId, limit) {
+        const listEl = document.getElementById(elementId);
+        if (!listEl) return;
+
+        const ranking = JSON.parse(localStorage.getItem('totem_ranking') || '[]').slice(0, limit);
 
         if (ranking.length === 0) {
             listEl.innerHTML = '<div class="ranking-item" style="justify-content:center; color: var(--text-dim);">Nenhum recorde registrado ainda.</div>';
@@ -698,39 +769,32 @@
             <div class="ranking-item">
                 <div>
                     <strong>#${idx + 1} ${item.name}</strong>
-                    <span style="display:block; font-size:0.75rem; color: var(--text-dim);">${item.company}</span>
+                    <span style="display:block; font-size:0.7rem; color: var(--text-dim);">${item.company}</span>
                 </div>
-                <strong style="color: var(--accent); align-self:center;">${item.time.toFixed(1)}s</strong>
+                <div style="text-align:right;">
+                    <strong style="color: var(--accent);">${item.pairs} pares</strong>
+                    <span style="display:block; font-size:0.7rem; color: var(--text-dim);">${item.time.toFixed(1)}s</span>
+                </div>
             </div>
         `).join('');
     }
 
-function sendPortfolioEmail(data) {
-    // Cole aqui a URL gerada no seu Web App do Apps Script
-    const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw5bVk0WYYvmJ_VM1I7JXf_EZ9FJuX9t4EZo-bfIIrA-vPAXdtYK4g9h8JZF00-G4BPdQ/exec";
+    function sendPortfolioEmail(data) {
+        const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw5bVk0WYYvmJ_VM1I7JXf_EZ9FJuX9t4EZo-bfIIrA-vPAXdtYK4g9h8JZF00-G4BPdQ/exec";
 
-    if (!WEBHOOK_URL) {
-        console.log("Simulação de envio (Webhook não configurado):", data);
-        return;
+        if (!WEBHOOK_URL) return;
+
+        fetch(WEBHOOK_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name: data.name,
+                company: data.company,
+                email: data.email
+            })
+        }).catch(err => console.error("Falha no disparo:", err));
     }
-
-    fetch(WEBHOOK_URL, {
-        method: 'POST',
-        mode: 'no-cors', // Fundamental para Google Apps Script aceitar requisições de páginas locais/totem
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            name: data.name,
-            company: data.company,
-            email: data.email
-        })
-    }).then(() => {
-        console.log("Lead enviado para processamento no Google Workspace.");
-    }).catch(err => {
-        console.error("Falha no disparo (totem sem internet):", err);
-    });
-}
 
     function backToStart() {
         document.getElementById('player-name').value = '';
@@ -739,7 +803,7 @@ function sendPortfolioEmail(data) {
         setScreen('screen-start');
     }
 
-    // --- ATALHO SECRETO: 5 TOQUES NO TÍTULO BAIXAM O CSV DE LEADS ---
+    // --- ATALHO SECRETO: 5 TOQUES NO TÍTULO BAIXAM O CSV ---
     let tapCount = 0;
     let tapTimer = null;
     document.getElementById('admin-export-trigger').addEventListener('click', () => {
@@ -761,21 +825,22 @@ function sendPortfolioEmail(data) {
         }
 
         let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
-        csvContent += "Nome;Empresa;Email;Tempo(s);Completou;Data\n";
+        csvContent += "Nome;Empresa;Email;Pares;Tempo(s);Completou;Data\n";
 
         data.forEach(row => {
-            csvContent += `"${row.name}";"${row.company}";"${row.email}";"${row.time}";"${row.completed ? 'SIM' : 'NÃO'}";"${row.date}"\n`;
+            csvContent += `"${row.name}";"${row.company}";"${row.email}";"${row.pairs}";"${row.time}";"${row.completed ? 'SIM' : 'NÃO'}";"${row.date}"\n`;
         });
 
         const encodedUri = encodeURI(csvContent);
         const link = document.createElement("a");
         link.setAttribute("href", encodedUri);
-        link.setAttribute("download", `leads_totem_${new Date().toISOString().slice(0,10)}.csv`);
+        link.setAttribute("download", `leads_infinity_${new Date().toISOString().slice(0,10)}.csv`);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
     }
 
+    renderLeaderboards();
     resetIdleTimer();
 </script>
 
