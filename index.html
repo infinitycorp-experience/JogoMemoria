@@ -883,8 +883,12 @@
         document.body.removeChild(link);
     }
 
+    // Renderiza o que já tem em cache imediatamente (sem tela em branco)
     renderLeaderboards();
     resetIdleTimer();
+
+    // Busca os dados atualizados da planilha na nuvem
+    fetchOnlineRanking();
 </script>
 
 </body>
