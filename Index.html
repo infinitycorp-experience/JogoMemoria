@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Desafio Corporativo - Totem</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #070a12;
+            --surface: rgba(18, 24, 38, 0.9);
+            --surface-border: rgba(255, 255, 255, 0.1);
+            --accent: #00e5ff;
+            --text: #f8fafc;
+            --text-dim: #94a3b8;
+
+            --time-green: #10b981;
+            --time-blue: #00e5ff;
+            --time-yellow: #facc15;
+            --time-red: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+
+        body {
+            background: radial-gradient(circle at 50% 30%, #111a2f 0%, var(--bg) 100%);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .totem-container {
+            width: 100%;
+            height: 100%;
+            max-width: 640px;
+            padding: 20px 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .screen {
+            display: none;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .screen.active { display: flex; }
+
+        .title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            line-height: 1;
+            margin-bottom: 8px;
+            background: linear-gradient(180deg, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .form-card {
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: 18px;
+            padding: 22px 18px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin: 16px 0;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            text-align: left;
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--surface-border);
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--accent);
+            background: rgba(0, 229, 255, 0.05);
+        }
+
+        /* --- HUD --- */
+        .hud {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            padding: 10px 18px;
+            border-radius: 14px;
+            margin-bottom: 10px;
+        }
+
+        .timer-display {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            transition: color 0.3s ease;
+        }
+
+        .timer-stage-green  { color: var(--time-green); text-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+        .timer-stage-blue   { color: var(--time-blue);  text-shadow: 0 0 15px rgba(0, 229, 255, 0.4); }
+        .timer-stage-yellow { color: var(--time-yellow); text-shadow: 0 0 15px rgba(250, 204, 21, 0.4); }
+        .timer-stage-red    { 
+            color: var(--time-red); 
+            text-shadow: 0 0 20px rgba(239, 68, 68, 0.8); 
+            animation: pulseAlert 0.4s infinite alternate; 
+        }
+
+        @keyframes pulseAlert {
+            from { transform: scale(1); }
+            to { transform: scale(1.08); }
+        }
+
+        /* --- Grid 4x8 --- */
+        .grid-container {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(8, 1fr);
+            gap: 7px;
+            width: 100%;
+            perspective: 1000px;
+        }
+
+        .card {
+            position: relative;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 8px;
+        }
+
+        .card.flipped, .card.matched { transform: rotateY(180deg); }
+
+        .card-face {
+            position: absolute;
+            inset: 0;
+            backface-visibility: hidden;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--surface-border);
+            padding: 4px;
+        }
+
+        .card-back { background: linear-gradient(135deg, #162035, #0c1220); }
+        .card-back::after { content: "◆"; font-size: 1.2rem; color: var(--accent); opacity: 0.5; }
+
+        .card-front { background: #ffffff; transform: rotateY(180deg); }
+        .card-front img { width: 65%; height: 65%; object-fit: contain; }
+        .card-front span {
+            font-size: 0.55rem;
+            font-weight: 800;
+            color: #0f172a;
+            text-transform: uppercase;
+            text-align: center;
+            line-height: 1;
+            margin-top: 2px;
+            max-width: 90%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card.matched .card-front {
+            border: 2px solid var(--accent);
+            box-shadow: inset 0 0 10px rgba(0, 229, 255, 0.3);
+        }
+
+        .btn-action {
+            background: linear-gradient(135deg, var(--accent) 0%, #0066ff 100%);
+            color: #040812;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            box-shadow: 0 8px 25px rgba(0, 229, 255, 0.3);
+        }
+
+        /* --- Ranking & Premiações --- */
+        .ranking-list {
+            margin: 12px 0;
+            width: 100%;
+            background: var(--surface);
+            border-radius: 12px;
+            border: 1px solid var(--surface-border);
+            max-height: 220px;
+            overflow-y: auto;
+        }
+
+        .ranking-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--surface-border);
+            font-size: 0.85rem;
+        }
+
+        .badge-prize {
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 1rem;
+            margin: 10px 0;
+            text-transform: uppercase;
+        }
+        .prize-top { background: #ffd700; color: #000; box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); }
+        .prize-mid { background: #cbd5e1; color: #000; box-shadow: 0 0 15px rgba(203, 213, 225, 0.3); }
+        .prize-low { background: #cd7f32; color: #fff; box-shadow: 0 0 15px rgba(205, 127, 50, 0.3); }
+        .prize-none { background: #334155; color: #94a3b8; }
+
+        /* --- Screensaver / Proteção de Tela --- */
+        #screensaver {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 50% 50%, #0c162d 0%, #030509 100%);
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            padding: 40px 20px;
+            cursor: pointer;
+        }
+
+        #screensaver.active { display: flex; }
+
+        .screensaver-logo-box {
+            text-align: center;
+            animation: pulseAlert 2s infinite alternate ease-in-out;
+        }
+
+        .showcase-slider {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .showcase-item {
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--surface-border);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .showcase-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .touch-prompt {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.6rem;
+            color: var(--accent);
+            letter-spacing: 3px;
+            animation: blinkText 1.5s infinite;
+        }
+
+        @keyframes blinkText {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- SCREENSAVER / STANDBY -->
+<div id="screensaver" onclick="dismissScreensaver()">
+    <div class="screensaver-logo-box">
+        <!-- Substitua pelo logo da sua empresa -->
+        <h1 class="title" style="font-size: 3.5rem;">SUA MARCA</h1>
+        <p style="color: var(--accent); letter-spacing: 2px;">SOLUÇÕES EM TECNOLOGIA & OUTSOURCING</p>
+    </div>
+
+    <!-- Amostra de Cards -->
+    <div class="showcase-slider" id="showcase-slider"></div>
+
+    <!-- Mini Ranking na Tela de Descanso -->
+    <div style="width: 100%; max-width: 400px; text-align: center;">
+        <span style="font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px;">Melhores Tempos da Feira</span>
+        <div class="ranking-list" id="screensaver-ranking"></div>
+    </div>
+
+    <div class="touch-prompt">TOQUE NA TELA PARA INICIAR</div>
+</div>
+
+<div class="totem-container">
+
+    <!-- TELA 1: CADASTRO -->
+    <div id="screen-start" class="screen active">
+        <!-- 5 toques no título acionam o download da planilha CSV -->
+        <h1 class="title" id="admin-export-trigger">INFINITYCORP</h1>
+        <p style="color: var(--text-dim); font-size: 0.9rem; text-align: center;">
+            Encontre os 16 pares em até 30s e ganhe prêmios.
+        </p>
+
+        <div class="form-card">
+            <div class="form-group">
+                <label>Nome Completo</label>
+                <input type="text" id="player-name" class="form-input" placeholder="Ex: Roberto Silva" autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label>Empresa</label>
+                <input type="text" id="player-company" class="form-input" placeholder="Ex: TechCorp" autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label>E-mail Corporativo</label>
+                <input type="email" id="player-email" class="form-input" placeholder="Ex: email@empresa.com.br" autocomplete="off">
+            </div>
+        </div>
+
+        <button class="btn-action" onclick="validateAndStart()">Iniciar Desafio</button>
+    </div>
+
+    <!-- TELA 2: TABULEIRO VERTICAL -->
+    <div id="screen-game" class="screen">
+        <div class="hud">
+            <div>
+                <span style="font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; display: block;">Pares</span>
+                <strong id="matches-display" style="font-size: 1.3rem;">0 / 16</strong>
+            </div>
+            <div id="timer" class="timer-display timer-stage-green">00.0s</div>
+        </div>
+
+        <div class="grid-container" id="grid"></div>
+    </div>
+
+    <!-- TELA 3: RESULTADO -->
+    <div id="screen-end" class="screen">
+        <h2 id="result-title" class="title" style="font-size: 2.2rem; margin-bottom: 2px;">Fim de Jogo</h2>
+        <div id="prize-badge" class="badge-prize">Sem Premiação</div>
+        <p id="result-summary" style="color: var(--text-dim); font-size: 0.85rem; margin-bottom: 6px; text-align: center;"></p>
+
+        <div class="ranking-list" id="ranking-list"></div>
+
+        <button class="btn-action" onclick="backToStart()">Próximo Participante</button>
+    </div>
+
+</div>
+
+<script>
+    // Catálogo de Produtos (Substitua as URLs pelos caminhos locais: ex: "img/foto1.png")
+    const CATALOG = [
+        { name: "Impressora A4", img: "https://cdn-icons-png.flaticon.com/512/2888/2888707.png" },
+        { name: "Multifuncional A3", img: "https://cdn-icons-png.flaticon.com/512/3059/3059489.png" },
+        { name: "Notebook Core i7", img: "https://cdn-icons-png.flaticon.com/512/428/428001.png" },
+        { name: "Totem Touch", img: "https://cdn-icons-png.flaticon.com/512/9187/9187555.png" },
+        { name: "Servidor Rack", img: "https://cdn-icons-png.flaticon.com/512/2312/2312613.png" },
+        { name: "Workstation Pro", img: "https://cdn-icons-png.flaticon.com/512/2933/2933245.png" },
+        { name: "Térmica Não Fiscal", img: "https://cdn-icons-png.flaticon.com/512/2888/2888722.png" },
+        { name: "Scanner de Mesa", img: "https://cdn-icons-png.flaticon.com/512/8122/8122615.png" },
+        { name: "Switch Gerenciável", img: "https://cdn-icons-png.flaticon.com/512/2885/2885417.png" },
+        { name: "Access Point Wi-Fi", img: "https://cdn-icons-png.flaticon.com/512/893/893273.png" },
+        { name: "No-Break Senoidal", img: "https://cdn-icons-png.flaticon.com/512/2933/2933240.png" },
+        { name: "Monitor Curvo", img: "https://cdn-icons-png.flaticon.com/512/689/689392.png" },
+        { name: "Storage NAS", img: "https://cdn-icons-png.flaticon.com/512/2885/2885444.png" },
+        { name: "Headset Pro", img: "https://cdn-icons-png.flaticon.com/512/1082/1082854.png" },
+        { name: "Leitor Biométrico", img: "https://cdn-icons-png.flaticon.com/512/2910/2910795.png" },
+        { name: "Firewall Appliance", img: "https://cdn-icons-png.flaticon.com/512/1006/1006771.png" }
+    ];
+
+    const TOTAL_PAIRS = 16;
+    const TIME_LIMIT = 30.0;
+    const IDLE_TIMEOUT_SECONDS = 45; // Tempo de inatividade para screensaver
+
+    let currentPlayer = { name: '', company: '', email: '' };
+    let cards = [];
+    let flippedCards = [];
+    let matchedPairs = 0;
+    let timerInterval = null;
+    let elapsedSeconds = 0.0;
+    let isBoardLocked = false;
+    let idleTimer = null;
+
+    // --- CONTROLE DE TELAS & STANDBY ---
+    function setScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        resetIdleTimer();
+    }
+
+    function resetIdleTimer() {
+        clearTimeout(idleTimer);
+        // Só entra em standby se estiver fora de uma partida em andamento
+        const isPlaying = document.getElementById('screen-game').classList.contains('active');
+        if (!isPlaying) {
+            idleTimer = setTimeout(showScreensaver, IDLE_TIMEOUT_SECONDS * 1000);
+        }
+    }
+
+    function showScreensaver() {
+        const screensaver = document.getElementById('screensaver');
+        
+        // Amostra 3 produtos dinâmicos
+        const slider = document.getElementById('showcase-slider');
+        const samples = [...CATALOG].sort(() => 0.5 - Math.random()).slice(0, 3);
+        slider.innerHTML = samples.map(p => `
+            <div class="showcase-item">
+                <img src="${p.img}" alt="${p.name}">
+            </div>
+        `).join('');
+
+        // Exibe top 3 na tela de proteção
+        const ssList = document.getElementById('screensaver-ranking');
+        const ranking = JSON.parse(localStorage.getItem('totem_ranking') || '[]').slice(0, 3);
+        if (ranking.length > 0) {
+            ssList.innerHTML = ranking.map((r, i) => `
+                <div class="ranking-item">
+                    <span>#${i+1} ${r.name} (${r.company})</span>
+                    <strong style="color:var(--accent);">${r.time.toFixed(1)}s</strong>
+                </div>
+            `).join('');
+        } else {
+            ssList.innerHTML = '<div class="ranking-item" style="justify-content:center;">Seja o primeiro a bater o recorde!</div>';
+        }
+
+        screensaver.classList.add('active');
+    }
+
+    function dismissScreensaver() {
+        document.getElementById('screensaver').classList.remove('active');
+        backToStart();
+    }
+
+    // Monitora toques na tela para resetar timer de inatividade
+    ['click', 'touchstart', 'mousemove'].forEach(evt => {
+        window.addEventListener(evt, resetIdleTimer, { passive: true });
+    });
+
+    // --- VALIDAÇÃO & INÍCIO ---
+    function validateAndStart() {
+        const name = document.getElementById('player-name').value.trim();
+        const company = document.getElementById('player-company').value.trim();
+        const email = document.getElementById('player-email').value.trim();
+
+        if (!name || !company || !email) {
+            alert('Por favor, preencha Nome, Empresa e E-mail.');
+            return;
+        }
+
+        if (!email.includes('@') || !email.includes('.')) {
+            alert('Por favor, informe um e-mail válido.');
+            return;
+        }
+
+        currentPlayer = { name, company, email };
+        
+        // Dispara e-mail de portfólio em segundo plano
+        sendPortfolioEmail(currentPlayer);
+
+        startGame();
+    }
+
+    // Algoritmo Fisher-Yates (Embaralhamento Real)
+    function shuffle(array) {
+        let arr = [...array];
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function startGame() {
+        setScreen('screen-game');
+        matchedPairs = 0;
+        flippedCards = [];
+        isBoardLocked = false;
+        elapsedSeconds = 0.0;
+
+        document.getElementById('matches-display').innerText = `0 / ${TOTAL_PAIRS}`;
+        updateTimerDisplay();
+
+        cards = shuffle([...CATALOG, ...CATALOG]);
+
+        const grid = document.getElementById('grid');
+        grid.innerHTML = '';
+
+        cards.forEach((item, index) => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.dataset.index = index;
+            card.dataset.name = item.name;
+
+            card.innerHTML = `
+                <div class="card-face card-back"></div>
+                <div class="card-face card-front">
+                    <img src="${item.img}" alt="${item.name}">
+                    <span>${item.name}</span>
+                </div>
+            `;
+
+            card.addEventListener('click', () => handleCardClick(card));
+            grid.appendChild(card);
+        });
+
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            elapsedSeconds += 0.1;
+            updateTimerDisplay();
+
+            if (elapsedSeconds >= TIME_LIMIT) {
+                endGame(false);
+            }
+        }, 100);
+    }
+
+    function updateTimerDisplay() {
+        const timerEl = document.getElementById('timer');
+        timerEl.innerText = `${elapsedSeconds.toFixed(1)}s`;
+
+        timerEl.className = 'timer-display';
+        if (elapsedSeconds <= 10.0) {
+            timerEl.classList.add('timer-stage-green');
+        } else if (elapsedSeconds <= 20.0) {
+            timerEl.classList.add('timer-stage-blue');
+        } else if (elapsedSeconds <= 24.0) {
+            timerEl.classList.add('timer-stage-yellow');
+        } else if (elapsedSeconds >= 28.0) {
+            timerEl.classList.add('timer-stage-red');
+        } else {
+            timerEl.classList.add('timer-stage-yellow');
+        }
+    }
+
+    function handleCardClick(card) {
+        if (isBoardLocked || card.classList.contains('flipped') || card.classList.contains('matched')) return;
+
+        card.classList.add('flipped');
+        flippedCards.push(card);
+
+        if (flippedCards.length === 2) {
+            checkMatch();
+        }
+    }
+
+    function checkMatch() {
+        isBoardLocked = true;
+        const [c1, c2] = flippedCards;
+
+        if (c1.dataset.name === c2.dataset.name) {
+            c1.classList.add('matched');
+            c2.classList.add('matched');
+            matchedPairs++;
+            document.getElementById('matches-display').innerText = `${matchedPairs} / ${TOTAL_PAIRS}`;
+            flippedCards = [];
+            isBoardLocked = false;
+
+            if (matchedPairs === TOTAL_PAIRS) {
+                endGame(true);
+            }
+        } else {
+            setTimeout(() => {
+                c1.classList.remove('flipped');
+                c2.classList.remove('flipped');
+                flippedCards = [];
+                isBoardLocked = false;
+            }, 600);
+        }
+    }
+
+    function endGame(victory) {
+        clearInterval(timerInterval);
+        setScreen('screen-end');
+
+        const title = document.getElementById('result-title');
+        const badge = document.getElementById('prize-badge');
+        const summary = document.getElementById('result-summary');
+        badge.className = 'badge-prize';
+
+        const finalTime = parseFloat(elapsedSeconds.toFixed(1));
+
+        if (!victory) {
+            title.innerText = "Tempo Esgotado!";
+            badge.innerText = "Sem Premiação";
+            badge.classList.add('prize-none');
+            summary.innerText = `${currentPlayer.name} (${currentPlayer.company}) - Limite de 30s atingido. O portfólio digital foi enviado ao seu e-mail!`;
+            saveRecord(finalTime, false);
+        } else {
+            title.innerText = "Desafio Concluído!";
+            summary.innerText = `${currentPlayer.name} (${currentPlayer.company}) completou em ${finalTime}s. O portfólio digital foi enviado ao seu e-mail!`;
+
+            if (finalTime <= 18.0) {
+                badge.innerText = "🏆 Prêmio Top";
+                badge.classList.add('prize-top');
+            } else if (finalTime <= 24.0) {
+                badge.innerText = "🥈 Prêmio Intermediário";
+                badge.classList.add('prize-mid');
+            } else {
+                badge.innerText = "🥉 Prêmio Simples";
+                badge.classList.add('prize-low');
+            }
+
+            saveRecord(finalTime, true);
+        }
+
+        renderLeaderboard();
+    }
+
+    // --- ARMAZENAMENTO & EXPORTAÇÃO ---
+    function saveRecord(time, completed) {
+        const list = JSON.parse(localStorage.getItem('totem_all_leads') || '[]');
+        const entry = {
+            name: currentPlayer.name,
+            company: currentPlayer.company,
+            email: currentPlayer.email,
+            time: time,
+            completed: completed,
+            date: new Date().toLocaleString('pt-BR')
+        };
+        list.push(entry);
+        localStorage.setItem('totem_all_leads', JSON.stringify(list));
+
+        if (completed) {
+            const ranking = JSON.parse(localStorage.getItem('totem_ranking') || '[]');
+            ranking.push(entry);
+            ranking.sort((a, b) => a.time - b.time);
+            localStorage.setItem('totem_ranking', JSON.stringify(ranking.slice(0, 10)));
+        }
+    }
+
+    function renderLeaderboard() {
+        const listEl = document.getElementById('ranking-list');
+        const ranking = JSON.parse(localStorage.getItem('totem_ranking') || '[]');
+
+        if (ranking.length === 0) {
+            listEl.innerHTML = '<div class="ranking-item" style="justify-content:center; color: var(--text-dim);">Nenhum recorde registrado ainda.</div>';
+            return;
+        }
+
+        listEl.innerHTML = ranking.map((item, idx) => `
+            <div class="ranking-item">
+                <div>
+                    <strong>#${idx + 1} ${item.name}</strong>
+                    <span style="display:block; font-size:0.75rem; color: var(--text-dim);">${item.company}</span>
+                </div>
+                <strong style="color: var(--accent); align-self:center;">${item.time.toFixed(1)}s</strong>
+            </div>
+        `).join('');
+    }
+
+function sendPortfolioEmail(data) {
+    // Cole aqui a URL gerada no seu Web App do Apps Script
+    const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw5bVk0WYYvmJ_VM1I7JXf_EZ9FJuX9t4EZo-bfIIrA-vPAXdtYK4g9h8JZF00-G4BPdQ/exec";
+
+    if (!WEBHOOK_URL) {
+        console.log("Simulação de envio (Webhook não configurado):", data);
+        return;
+    }
+
+    fetch(WEBHOOK_URL, {
+        method: 'POST',
+        mode: 'no-cors', // Fundamental para Google Apps Script aceitar requisições de páginas locais/totem
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            name: data.name,
+            company: data.company,
+            email: data.email
+        })
+    }).then(() => {
+        console.log("Lead enviado para processamento no Google Workspace.");
+    }).catch(err => {
+        console.error("Falha no disparo (totem sem internet):", err);
+    });
+}
+
+    function backToStart() {
+        document.getElementById('player-name').value = '';
+        document.getElementById('player-company').value = '';
+        document.getElementById('player-email').value = '';
+        setScreen('screen-start');
+    }
+
+    // --- ATALHO SECRETO: 5 TOQUES NO TÍTULO BAIXAM O CSV DE LEADS ---
+    let tapCount = 0;
+    let tapTimer = null;
+    document.getElementById('admin-export-trigger').addEventListener('click', () => {
+        tapCount++;
+        clearTimeout(tapTimer);
+        tapTimer = setTimeout(() => { tapCount = 0; }, 1200);
+
+        if (tapCount >= 5) {
+            exportLeadsToCSV();
+            tapCount = 0;
+        }
+    });
+
+    function exportLeadsToCSV() {
+        const data = JSON.parse(localStorage.getItem('totem_all_leads') || '[]');
+        if (data.length === 0) {
+            alert('Nenhum dado registrado para exportar.');
+            return;
+        }
+
+        let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+        csvContent += "Nome;Empresa;Email;Tempo(s);Completou;Data\n";
+
+        data.forEach(row => {
+            csvContent += `"${row.name}";"${row.company}";"${row.email}";"${row.time}";"${row.completed ? 'SIM' : 'NÃO'}";"${row.date}"\n`;
+        });
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `leads_totem_${new Date().toISOString().slice(0,10)}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    resetIdleTimer();
+</script>
+
+</body>
+</html>
