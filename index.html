@@ -640,11 +640,11 @@
             title.innerText = "Tempo Esgotado!";
             badge.innerText = "Sem Premiação";
             badge.classList.add('prize-none');
-            summary.innerText = `${currentPlayer.name} (${currentPlayer.company}) - Limite de 30s atingido. O portfólio digital foi enviado ao seu e-mail!`;
+            summary.innerText = `${currentPlayer.name} (${currentPlayer.company}) - Limite de 30s atingido. Obrigado por ter participado da nossa brincadeira`;
             saveRecord(finalTime, false);
         } else {
             title.innerText = "Desafio Concluído!";
-            summary.innerText = `${currentPlayer.name} (${currentPlayer.company}) completou em ${finalTime}s. O portfólio digital foi enviado ao seu e-mail!`;
+            summary.innerText = `${currentPlayer.name} (${currentPlayer.company}) completou em ${finalTime}s. Parabéns!!!!`;
 
             if (finalTime <= 18.0) {
                 badge.innerText = "🏆 Prêmio Top";
