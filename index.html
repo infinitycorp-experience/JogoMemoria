@@ -812,11 +812,38 @@
         });
     }
 
+        const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw5bVk0WYYvmJ_VM1I7JXf_EZ9FJuX9t4EZo-bfIIrA-vPAXdtYK4g9h8JZF00-G4BPdQ/exec";
+
+    // --- BUSCA O RANKING EM TEMPO REAL DIRETO DO GOOGLE SHEETS ---
+    async function fetchOnlineRanking() {
+        if (!WEBHOOK_URL) return;
+
+        try {
+            const response = await fetch(WEBHOOK_URL);
+            if (!response.ok) throw new Error("Erro na rede ao consultar ranking");
+            
+            const cloudRanking = await response.json();
+            
+            if (Array.isArray(cloudRanking) && cloudRanking.length > 0) {
+                // Atualiza o storage local como espelho
+                localStorage.setItem('totem_ranking', JSON.stringify(cloudRanking));
+                renderLeaderboards();
+            }
+        } catch (err) {
+            console.warn("Totem em modo offline ou carregando do cache local:", err);
+            // Se falhar a rede, continua exibindo o que já tem local
+            renderLeaderboards();
+        }
+    }
+
     function backToStart() {
         document.getElementById('player-name').value = '';
         document.getElementById('player-company').value = '';
         document.getElementById('player-email').value = '';
         setScreen('screen-start');
+        
+        // Atualiza os recordes da nuvem sempre que volta para a tela inicial
+        fetchOnlineRanking();
     }
 
     // --- ATALHO SECRETO: 5 TOQUES NO TÍTULO BAIXAM O CSV ---
