@@ -535,23 +535,23 @@
 
     // --- VALIDAÇÃO & INÍCIO ---
     function validateAndStart() {
-        const name = document.getElementById('player-name').value.trim();
-        const company = document.getElementById('player-company').value.trim();
-        const email = document.getElementById('player-email').value.trim();
+    const name = document.getElementById('player-name').value.trim();
+    const company = document.getElementById('player-company').value.trim();
+    const email = document.getElementById('player-email').value.trim();
 
-        if (!name || !company || !email) {
-            alert('Por favor, preencha Nome, Empresa e E-mail.');
-            return;
-        }
+    if (!name || !company || !email) {
+        alert('Por favor, preencha Nome, Empresa e E-mail.');
+        return;
+    }
 
-        if (!email.includes('@') || !email.includes('.')) {
-            alert('Por favor, informe um e-mail corporativo válido.');
-            return;
-        }
+    if (!email.includes('@') || !email.includes('.')) {
+        alert('Por favor, informe um e-mail corporativo válido.');
+        return;
+    }
 
-        currentPlayer = { name, company, email };
-        sendPortfolioEmail(currentPlayer);
-        startGame();
+    currentPlayer = { name, company, email };
+    // sendPortfolioEmail foi movido para o endGame
+    startGame();
     }
 
     // Algoritmo Fisher-Yates
@@ -691,25 +691,29 @@
         badgeBox.className = 'badge-prize-box';
         const finalTime = parseFloat(elapsedSeconds.toFixed(1));
         const finishedAll = (matchedPairs === TOTAL_PAIRS);
+        let prizeName = "Sem Premiação";
 
-        // LÓGICA DE PREMIAÇÃO:
-        // 15 e 16 pares = Ouro | 12 a 14 = Prata | 8 a 11 = Bronze | < 8 = Sem premiação
+        // LÓGICA DE PREMIAÇÃO
         if (matchedPairs >= 15) {
             badgeBox.classList.add('prize-gold');
             iconSpan.innerHTML = ICONS.gold;
             textSpan.innerText = "Medalha de Ouro";
+            prizeName = "Ouro (15-16 pares)";
         } else if (matchedPairs >= 12) {
             badgeBox.classList.add('prize-silver');
             iconSpan.innerHTML = ICONS.silver;
             textSpan.innerText = "Medalha de Prata";
+            prizeName = "Prata (12-14 pares)";
         } else if (matchedPairs >= 8) {
             badgeBox.classList.add('prize-bronze');
             iconSpan.innerHTML = ICONS.bronze;
             textSpan.innerText = "Medalha de Bronze";
+            prizeName = "Bronze (8-11 pares)";
         } else {
             badgeBox.classList.add('prize-none');
             iconSpan.innerHTML = ICONS.none;
             textSpan.innerText = "Sem Premiação";
+            prizeName = "Nenhuma (< 8 pares)";
         }
 
         if (finishedAll) {
@@ -720,8 +724,20 @@
             summary.innerText = `${currentPlayer.name} (${currentPlayer.company}) - Conquistou ${matchedPairs} de 16 pares em 45s.`;
         }
 
-        saveRecord(finalTime, matchedPairs, finishedAll);
+        // Salva localmente (fallback offline)
+        saveRecord(finalTime, matchedPairs, finishedAll, prizeName);
         renderLeaderboards();
+
+        // Envia para o Google Sheets e dispara e-mail com os dados completos
+        sendToGoogleSheets({
+            name: currentPlayer.name,
+            company: currentPlayer.company,
+            email: currentPlayer.email,
+            pairs: matchedPairs,
+            time: finalTime,
+            prize: prizeName,
+            completed: finishedAll
+        });
     }
 
     // --- ARMAZENAMENTO & EXPORTAÇÃO ---
@@ -779,7 +795,7 @@
         `).join('');
     }
 
-    function sendPortfolioEmail(data) {
+    function sendToGoogleSheets(data) {
         const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw5bVk0WYYvmJ_VM1I7JXf_EZ9FJuX9t4EZo-bfIIrA-vPAXdtYK4g9h8JZF00-G4BPdQ/exec";
 
         if (!WEBHOOK_URL) return;
@@ -788,12 +804,12 @@
             method: 'POST',
             mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: data.name,
-                company: data.company,
-                email: data.email
-            })
-        }).catch(err => console.error("Falha no disparo:", err));
+            body: JSON.stringify(data)
+        }).then(() => {
+            console.log("Dados gravados com sucesso na Planilha Google.");
+        }).catch(err => {
+            console.error("Falha ao sincronizar com a planilha (totem offline):", err);
+        });
     }
 
     function backToStart() {
