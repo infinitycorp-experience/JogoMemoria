@@ -814,27 +814,36 @@
 
         const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw5bVk0WYYvmJ_VM1I7JXf_EZ9FJuX9t4EZo-bfIIrA-vPAXdtYK4g9h8JZF00-G4BPdQ/exec";
 
-    // --- BUSCA O RANKING EM TEMPO REAL DIRETO DO GOOGLE SHEETS ---
-    async function fetchOnlineRanking() {
+        // --- BUSCA O RANKING EM TEMPO REAL (SEM PROBLEMAS DE CORS) ---
+    function fetchOnlineRanking() {
+        const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw5bVk0WYYvmJ_VM1I7JXf_EZ9FJuX9t4EZo-bfIIrA-vPAXdtYK4g9h8JZF00-G4BPdQ/exec";
         if (!WEBHOOK_URL) return;
 
-        try {
-            const response = await fetch(WEBHOOK_URL);
-            if (!response.ok) throw new Error("Erro na rede ao consultar ranking");
-            
-            const cloudRanking = await response.json();
-            
+        // Callback global para receber os dados
+        window.handleCloudRanking = function(cloudRanking) {
             if (Array.isArray(cloudRanking) && cloudRanking.length > 0) {
-                // Atualiza o storage local como espelho
                 localStorage.setItem('totem_ranking', JSON.stringify(cloudRanking));
                 renderLeaderboards();
             }
-        } catch (err) {
-            console.warn("Totem em modo offline ou carregando do cache local:", err);
-            // Se falhar a rede, continua exibindo o que já tem local
+            // Remove a tag injetada
+            const oldScript = document.getElementById('jsonp-ranking');
+            if (oldScript) oldScript.remove();
+        };
+
+        // Injeta script dinâmico (técnica JSONP imune a CORS)
+        const oldScript = document.getElementById('jsonp-ranking');
+        if (oldScript) oldScript.remove();
+
+        const script = document.createElement('script');
+        script.id = 'jsonp-ranking';
+        script.src = `${WEBHOOK_URL}?callback=handleCloudRanking&t=${new Date().getTime()}`;
+        script.onerror = function() {
+            console.warn("Totem em modo offline ou carregando do cache local.");
             renderLeaderboards();
-        }
+        };
+        document.body.appendChild(script);
     }
+
 
     function backToStart() {
         document.getElementById('player-name').value = '';
