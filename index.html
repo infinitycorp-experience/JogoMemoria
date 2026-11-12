@@ -11,6 +11,7 @@
             --surface: rgba(18, 24, 38, 0.9);
             --surface-border: rgba(255, 255, 255, 0.1);
             --accent: #00e5ff;
+            --accent-glow: rgba(0, 229, 255, 0.4);
             --text: #f8fafc;
             --text-dim: #94a3b8;
 
@@ -156,16 +157,6 @@
             to { transform: scale(1.08); }
         }
 
-        /* Aviso de Memorização */
-        .memo-banner {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.1rem;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            animation: blinkText 0.8s infinite;
-        }
-
         /* --- Grid 4x8 --- */
         .grid-container {
             flex: 1;
@@ -238,16 +229,25 @@
             text-transform: uppercase;
             letter-spacing: 1.5px;
             box-shadow: 0 8px 25px rgba(0, 229, 255, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .btn-action:disabled,
+        .btn-action.btn-locked {
+            opacity: 0.45;
+            cursor: not-allowed;
+            pointer-events: none;
+            filter: grayscale(0.7);
+            box-shadow: none;
+            transform: none !important;
         }
 
         /* --- Rankings --- */
-        /* --- Ranking & Leaderboard Ajustado --- */
         .ranking-container {
             width: 100%;
             margin-top: 14px;
         }
 
-        /* Título com peso e destaque real de cabeçalho */
         .ranking-title-label {
             font-family: 'Rajdhani', sans-serif;
             font-size: 1.25rem;
@@ -274,7 +274,6 @@
             background: linear-gradient(90deg, var(--accent), transparent);
         }
 
-        /* Container da lista com scroll limpo e moderno */
         .ranking-list {
             width: 100%;
             background: rgba(18, 24, 38, 0.95);
@@ -285,7 +284,6 @@
             padding: 4px;
         }
 
-        /* Barra de rolagem personalizada ultrafina e discreta */
         .ranking-list::-webkit-scrollbar {
             width: 4px;
         }
@@ -298,7 +296,6 @@
             border-radius: 4px;
         }
 
-        /* Linha única contínua (Nome - Empresa - Pares) */
         .ranking-item {
             display: flex;
             align-items: center;
@@ -360,7 +357,6 @@
             flex-shrink: 0;
         }
 
-        /* Pódio: Destaque de Ouro, Prata e Bronze */
         .ranking-item.top-1 {
             background: linear-gradient(90deg, rgba(255, 215, 0, 0.12), transparent);
             border-left: 3px solid #ffd700;
@@ -389,6 +385,34 @@
         .ranking-item.top-3 .rank-score {
             color: #e69c24;
             text-shadow: 0 0 10px rgba(205, 127, 50, 0.4);
+        }
+
+        /* --- Card de Destaque da Posição --- */
+        .player-rank-box {
+            background: rgba(0, 229, 255, 0.08);
+            border: 1px solid rgba(0, 229, 255, 0.4);
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.15);
+            border-radius: 14px;
+            padding: 8px 16px;
+            margin: 6px 0;
+            text-align: center;
+            width: 100%;
+        }
+
+        .player-rank-box span {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            display: block;
+        }
+
+        .player-rank-box strong {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 2rem;
+            color: var(--accent);
+            letter-spacing: 2px;
+            text-shadow: 0 0 12px rgba(0, 229, 255, 0.5);
         }
 
         /* --- Badge de Premiação com SVG --- */
@@ -421,7 +445,7 @@
             position: fixed;
             inset: 0;
             background: radial-gradient(circle at 50% 50%, #0c162d 0%, #030509 100%);
-            z-index: 9999;
+            z-index: 9990;
             display: none;
             flex-direction: column;
             justify-content: space-around;
@@ -471,6 +495,61 @@
             animation: blinkText 1.5s infinite;
         }
 
+        /* --- Overlay de Contagem Regressiva --- */
+        .countdown-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 15, 29, 0.88);
+            backdrop-filter: blur(8px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .countdown-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .countdown-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            text-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
+        }
+
+        .countdown-subtitle {
+            font-size: 1.05rem;
+            color: var(--text-dim);
+            margin-bottom: 25px;
+            text-align: center;
+            max-width: 320px;
+        }
+
+        .countdown-number {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 7rem;
+            font-weight: 800;
+            color: var(--accent);
+            text-shadow: 0 0 35px var(--accent-glow);
+            line-height: 1;
+            animation: pulseCount 0.9s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseCount {
+            0% { transform: scale(0.85); opacity: 0.7; }
+            100% { transform: scale(1.15); opacity: 1; }
+        }
+
         @keyframes blinkText {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.3; }
@@ -480,42 +559,15 @@
             from { opacity: 0; transform: translateY(6px); }
             to { opacity: 1; transform: translateY(0); }
         }
-                /* Card de Destaque da Posição do Participante */
-        .player-rank-box {
-            background: rgba(0, 229, 255, 0.08);
-            border: 1px solid rgba(0, 229, 255, 0.4);
-            box-shadow: 0 0 20px rgba(0, 229, 255, 0.15);
-            border-radius: 14px;
-            padding: 8px 16px;
-            margin: 6px 0;
-            text-align: center;
-            width: 100%;
-        }
-
-        .player-rank-box span {
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            display: block;
-        }
-
-        .player-rank-box strong {
+                /* Banner de Memorização no HUD */
+        .memo-banner {
             font-family: 'Rajdhani', sans-serif;
-            font-size: 2rem;
+            font-size: 1.25rem;
+            font-weight: 700;
             color: var(--accent);
+            text-transform: uppercase;
             letter-spacing: 2px;
-            text-shadow: 0 0 12px rgba(0, 229, 255, 0.5);
-        }
-                /* Estilo do botão travado para evitar toques acidentais */
-        .btn-action:disabled,
-        .btn-action.btn-locked {
-            opacity: 0.45;
-            cursor: not-allowed;
-            pointer-events: none; /* Ignora qualquer toque no touch */
-            filter: grayscale(0.7);
-            box-shadow: none;
-            transform: none !important;
+            animation: pulseAlert 0.5s infinite alternate;
         }
 
     </style>
@@ -537,6 +589,13 @@
     </div>
 
     <div class="touch-prompt">TOQUE NA TELA PARA JOGAR</div>
+</div>
+
+<!-- OVERLAY DA CONTAGEM REGRESSIVA / PREPARAÇÃO -->
+<div id="countdown-overlay" class="countdown-overlay">
+    <div class="countdown-title">PREPARE-SE!</div>
+    <div class="countdown-subtitle">Memorize as cartas do tabuleiro...</div>
+    <div id="countdown-number" class="countdown-number">3</div>
 </div>
 
 <div class="totem-container">
@@ -564,7 +623,7 @@
         </div>
 
         <button class="btn-action" onclick="validateAndStart()">Iniciar Desafio</button>
-<br>
+
         <div class="ranking-container">
             <span class="ranking-title-label">Líderes do Desafio</span>
             <div class="ranking-list" id="start-ranking-list"></div>
@@ -578,14 +637,14 @@
                 <span style="font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; display: block;">Pares</span>
                 <strong id="matches-display" style="font-size: 1.25rem;">0 / 16</strong>
             </div>
-            <div id="memo-notice" class="memo-banner" style="display:none;">Memorize!</div>
+            <!-- Aviso que aparecerá no centro enquanto as cartas estiverem abertas -->
+            <div id="memo-notice" class="memo-banner" style="display: none;">MEMORIZE! (3s)</div>
             <div id="timer" class="timer-display timer-stage-green">45.0s</div>
         </div>
 
         <div class="grid-container" id="grid"></div>
     </div>
 
-    <!-- TELA 3: RESULTADO -->
     <!-- TELA 3: RESULTADO -->
     <div id="screen-end" class="screen">
         <h2 class="title" style="font-size: 1.9rem; margin-bottom: 2px;">Obrigado por Jogar com a Gente!</h2>
@@ -610,7 +669,7 @@
             <div class="ranking-list" id="end-ranking-list"></div>
         </div>
 
-        <!-- Botão com Contador Regressivo de 30s -->
+        <!-- Botão com Contador Regressivo e Trava -->
         <button id="btn-next-player" class="btn-action" style="margin-top: 10px;" onclick="backToStart()">
             Próximo Participante (30s)
         </button>
@@ -647,19 +706,21 @@
         none: `<svg viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`
     };
 
+    const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw5bVk0WYYvmJ_VM1I7JXf_EZ9FJuX9t4EZo-bfIIrA-vPAXdtYK4g9h8JZF00-G4BPdQ/exec";
     const TOTAL_PAIRS = 16;
-    const TIME_LIMIT = 45.0; // 45 segundos
-    const PREVIEW_SECONDS = 2.5; // Preview inicial de 2.5s
+    const TIME_LIMIT = 45.0; 
     const IDLE_TIMEOUT_SECONDS = 45;
+    const LOCK_DELAY_SECONDS = 5;
 
     let currentPlayer = { name: '', company: '', email: '' };
-    let cards = [];
     let flippedCards = [];
     let matchedPairs = 0;
     let timerInterval = null;
     let elapsedSeconds = 0.0;
     let isBoardLocked = false;
     let idleTimer = null;
+    let endCountdownTimer = null;
+    let endCountdownSeconds = 30;
 
     // --- CONTROLE DE TELAS & STANDBY ---
     function setScreen(id) {
@@ -703,26 +764,24 @@
 
     // --- VALIDAÇÃO & INÍCIO ---
     function validateAndStart() {
-    const name = document.getElementById('player-name').value.trim();
-    const company = document.getElementById('player-company').value.trim();
-    const email = document.getElementById('player-email').value.trim();
+        const name = document.getElementById('player-name').value.trim();
+        const company = document.getElementById('player-company').value.trim();
+        const email = document.getElementById('player-email').value.trim();
 
-    if (!name || !company || !email) {
-        alert('Por favor, preencha Nome, Empresa e E-mail.');
-        return;
+        if (!name || !company || !email) {
+            alert('Por favor, preencha Nome, Empresa e E-mail.');
+            return;
+        }
+
+        if (!email.includes('@') || !email.includes('.')) {
+            alert('Por favor, informe um e-mail corporativo válido.');
+            return;
+        }
+
+        currentPlayer = { name, company, email };
+        startGame();
     }
 
-    if (!email.includes('@') || !email.includes('.')) {
-        alert('Por favor, informe um e-mail corporativo válido.');
-        return;
-    }
-
-    currentPlayer = { name, company, email };
-    // sendPortfolioEmail foi movido para o endGame
-    startGame();
-    }
-
-    // Algoritmo Fisher-Yates
     function shuffle(array) {
         let arr = [...array];
         for (let i = arr.length - 1; i > 0; i--) {
@@ -733,31 +792,35 @@
     }
 
     function startGame() {
-        setScreen('screen-game');
         matchedPairs = 0;
-        flippedCards = [];
         elapsedSeconds = 0.0;
-        isBoardLocked = true; // Bloqueado durante o preview inicial
+        flippedCards = [];
+        isBoardLocked = true; // Trava cliques durante o preview de 3s
 
-        document.getElementById('matches-display').innerText = `0 / ${TOTAL_PAIRS}`;
-        
-        const timerEl = document.getElementById('timer');
-        const memoEl = document.getElementById('memo-notice');
-        
-        timerEl.innerText = `${TIME_LIMIT.toFixed(1)}s`;
-        timerEl.className = 'timer-display timer-stage-green';
-        memoEl.style.display = 'block';
+        document.getElementById('timer').innerText = '45.0s';
+        document.getElementById('matches-display').innerText = '0 / 16';
 
-        cards = shuffle([...CATALOG, ...CATALOG]);
+        // 1. Monta o tabuleiro com as cartas já reveladas
+        createPreviewBoard();
 
+        // 2. Transiciona para a tela do jogo
+        setScreen('screen-game');
+
+        // 3. Roda a contagem regressiva de 3s (3.. 2.. 1.. VALENDO!)
+        runPreparationCountdown();
+    }
+
+    function createPreviewBoard() {
         const grid = document.getElementById('grid');
         grid.innerHTML = '';
 
-        // Cria cartas viradas para CIMA para o Preview de 2.5s
-        cards.forEach((item, index) => {
+        // Embaralha as 16 duplas (32 cartas)
+        const deck = shuffle([...CATALOG, ...CATALOG]);
+
+        deck.forEach((item) => {
             const card = document.createElement('div');
+            // Começa 'flipped' para memorização
             card.className = 'card flipped';
-            card.dataset.index = index;
             card.dataset.name = item.name;
 
             card.innerHTML = `
@@ -771,24 +834,76 @@
             card.addEventListener('click', () => handleCardClick(card));
             grid.appendChild(card);
         });
+    }
 
-        // Contagem regressiva do Preview Inicial
-        setTimeout(() => {
-            document.querySelectorAll('.card').forEach(c => c.classList.remove('flipped'));
-            memoEl.style.display = 'none';
-            isBoardLocked = false;
+    function runPreparationCountdown() {
+        const overlay = document.getElementById('countdown-overlay');
+        const countDisplay = document.getElementById('countdown-number');
+        const memoNotice = document.getElementById('memo-notice');
+        const timerEl = document.getElementById('timer');
 
-            // Inicia o cronômetro oficial de 45 segundos
-            clearInterval(timerInterval);
-            timerInterval = setInterval(() => {
-                elapsedSeconds += 0.1;
+        // FASE 1: Contagem de Preparação no Overlay (3, 2, 1)
+        overlay.classList.add('active');
+        let prepCount = 3;
+        countDisplay.style.fontSize = "7rem";
+        countDisplay.innerText = prepCount;
+
+        const prepInterval = setInterval(() => {
+            prepCount--;
+
+            if (prepCount > 0) {
+                countDisplay.innerText = prepCount;
+            } else {
+                clearInterval(prepInterval);
+                
+                // 1. Remove o overlay escuro para o jogador ver o tabuleiro 100% limpo
+                overlay.classList.remove('active');
+
+                // FASE 2: Período de Memorização com Cartas Abertas (3 segundos)
+                let memoSeconds = 4;
+                memoNotice.style.display = 'block';
+                memoNotice.innerText = `MEMORIZE! (${memoSeconds}s)`;
+                timerEl.innerText = `${memoSeconds}.0s`;
+
+                const memoInterval = setInterval(() => {
+                    memoSeconds--;
+                    if (memoSeconds > 0) {
+                        memoNotice.innerText = `MEMORIZE! (${memoSeconds}s)`;
+                        timerEl.innerText = `${memoSeconds}.0s`;
+                    } else {
+                        clearInterval(memoInterval);
+                        memoNotice.style.display = 'none';
+
+                        // FASE 3: Vira as cartas para baixo e dá a largada!
+                        const allCards = document.querySelectorAll('.card');
+                        allCards.forEach(c => c.classList.remove('flipped'));
+
+                        setTimeout(() => {
+                            isBoardLocked = false;
+                            startTimer(); // Inicia os 45 segundos oficiais
+                        }, 350);
+                    }
+                }, 1000);
+            }
+        }, 1000);
+    }
+
+    // --- CRONÔMETRO OFICIAL DE 45 SEGUNDOS ---
+    function startTimer() {
+        clearInterval(timerInterval);
+        const startTime = Date.now();
+
+        timerInterval = setInterval(() => {
+            elapsedSeconds = (Date.now() - startTime) / 1000;
+            updateTimerDisplay();
+
+            if (elapsedSeconds >= TIME_LIMIT) {
+                elapsedSeconds = TIME_LIMIT;
                 updateTimerDisplay();
-
-                if (elapsedSeconds >= TIME_LIMIT) {
-                    endGame();
-                }
-            }, 100);
-        }, PREVIEW_SECONDS * 2500);
+                clearInterval(timerInterval);
+                endGame();
+            }
+        }, 100);
     }
 
     function updateTimerDisplay() {
@@ -796,8 +911,6 @@
         const timerEl = document.getElementById('timer');
         timerEl.innerText = `${remaining.toFixed(1)}s`;
 
-        // Regra de cores para 45 segundos:
-        // Até 15s decorridos: Verde | Até 30s: Azul | Até 38s: Amarelo | 38s em diante: Vermelho
         timerEl.className = 'timer-display';
         if (elapsedSeconds <= 15.0) {
             timerEl.classList.add('timer-stage-green');
@@ -846,9 +959,7 @@
         }
     }
 
-    let endCountdownTimer = null;
-    let endCountdownSeconds = 30;
-
+    // --- ENCERRAMENTO DO JOGO ---
     function endGame() {
         clearInterval(timerInterval);
         setScreen('screen-end');
@@ -863,7 +974,6 @@
         const finishedAll = (matchedPairs === TOTAL_PAIRS);
         let prizeName = "Sem Premiação";
 
-        // LÓGICA DE PREMIAÇÃO
         if (matchedPairs >= 15) {
             badgeBox.classList.add('prize-gold');
             iconSpan.innerHTML = ICONS.gold;
@@ -892,14 +1002,14 @@
             summary.innerText = `${currentPlayer.name} (${currentPlayer.company}) - Fez ${matchedPairs} de 16 pares em 45s.`;
         }
 
-        // 1. Salva e obtém a posição do jogador no ranking
+        // 1. Salva e pega posição no ranking
         const playerRank = saveRecord(finalTime, matchedPairs, finishedAll, prizeName);
         document.getElementById('player-position-display').innerText = `#${playerRank}º LUGAR`;
 
-        // 2. Renderiza o leaderboard atualizado
+        // 2. Renderiza leaderboards
         renderLeaderboards();
 
-        // 3. Sincroniza com Google Sheets em segundo plano
+        // 3. Sincroniza em segundo plano com a planilha Google
         sendToGoogleSheets({
             name: currentPlayer.name,
             company: currentPlayer.company,
@@ -910,11 +1020,10 @@
             completed: finishedAll
         });
 
-        // 4. Inicia contagem regressiva de 30s para voltar à tela inicial
+        // 4. Inicia contagem de 30s com trava inicial de segurança de 5s
         startEndScreenCountdown();
     }
 
-    // Salva o registro e retorna a posição exata
     function saveRecord(time, pairs, completed, prize) {
         const entry = {
             name: currentPlayer.name,
@@ -927,12 +1036,10 @@
             date: new Date().toLocaleString('pt-BR')
         };
 
-        // Histórico geral local
         const list = JSON.parse(localStorage.getItem('totem_all_leads') || '[]');
         list.push(entry);
         localStorage.setItem('totem_all_leads', JSON.stringify(list));
 
-        // Ranking ordenado: quem fez mais pares primeiro; menor tempo desempata
         let ranking = JSON.parse(localStorage.getItem('totem_ranking') || '[]');
         ranking.push(entry);
         ranking.sort((a, b) => {
@@ -940,20 +1047,12 @@
             return a.time - b.time;
         });
 
-        // Descobre em qual posição o participante atual ficou
         const playerRankIndex = ranking.findIndex(r => r.name === entry.name && r.pairs === entry.pairs && r.time === entry.time);
         const playerRank = playerRankIndex !== -1 ? playerRankIndex + 1 : ranking.length;
 
-        // Mantém os melhores no storage
         localStorage.setItem('totem_ranking', JSON.stringify(ranking.slice(0, 25)));
-
         return playerRank;
     }
-
-    // Temporizador de 30 segundos na tela de encerramento
-    endCountdownTimer = null;
-    endCountdownSeconds = 30;
-    const LOCK_DELAY_SECONDS = 5; // Tempo de trava de segurança
 
     function startEndScreenCountdown() {
         clearInterval(endCountdownTimer);
@@ -962,7 +1061,6 @@
 
         const btn = document.getElementById('btn-next-player');
         
-        // 1. Trava o botão imediatamente
         btn.disabled = true;
         btn.classList.add('btn-locked');
         btn.innerText = `Aguarde (${lockSeconds}s)...`;
@@ -970,11 +1068,9 @@
         endCountdownTimer = setInterval(() => {
             endCountdownSeconds--;
 
-            // Controle da trava inicial de 5 segundos
             if (lockSeconds > 0) {
                 lockSeconds--;
                 if (lockSeconds === 0) {
-                    // Libera o botão para toque
                     btn.disabled = false;
                     btn.classList.remove('btn-locked');
                     btn.innerText = `Próximo Participante (${endCountdownSeconds}s)`;
@@ -982,11 +1078,9 @@
                     btn.innerText = `Aguarde (${lockSeconds}s)...`;
                 }
             } else {
-                // Período liberado onde o clique é permitido
                 btn.innerText = `Próximo Participante (${endCountdownSeconds}s)`;
             }
 
-            // Ao zerar os 30s totais, volta sozinho
             if (endCountdownSeconds <= 0) {
                 clearInterval(endCountdownTimer);
                 backToStart();
@@ -997,7 +1091,6 @@
     function backToStart() {
         clearInterval(endCountdownTimer);
         
-        // Garante que o botão volte ao estado normal para a próxima partida
         const btn = document.getElementById('btn-next-player');
         if (btn) {
             btn.disabled = false;
@@ -1010,7 +1103,6 @@
         document.getElementById('player-email').value = '';
         setScreen('screen-start');
         
-        // Atualiza o ranking da nuvem para o próximo
         fetchOnlineRanking();
     }
 
@@ -1051,8 +1143,6 @@
     }
 
     function sendToGoogleSheets(data) {
-        const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw5bVk0WYYvmJ_VM1I7JXf_EZ9FJuX9t4EZo-bfIIrA-vPAXdtYK4g9h8JZF00-G4BPdQ/exec";
-
         if (!WEBHOOK_URL) return;
 
         fetch(WEBHOOK_URL, {
@@ -1067,25 +1157,18 @@
         });
     }
 
-        const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw5bVk0WYYvmJ_VM1I7JXf_EZ9FJuX9t4EZo-bfIIrA-vPAXdtYK4g9h8JZF00-G4BPdQ/exec";
-
-        // --- BUSCA O RANKING EM TEMPO REAL (SEM PROBLEMAS DE CORS) ---
     function fetchOnlineRanking() {
-        const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw5bVk0WYYvmJ_VM1I7JXf_EZ9FJuX9t4EZo-bfIIrA-vPAXdtYK4g9h8JZF00-G4BPdQ/exec";
         if (!WEBHOOK_URL) return;
 
-        // Callback global para receber os dados
         window.handleCloudRanking = function(cloudRanking) {
             if (Array.isArray(cloudRanking) && cloudRanking.length > 0) {
                 localStorage.setItem('totem_ranking', JSON.stringify(cloudRanking));
                 renderLeaderboards();
             }
-            // Remove a tag injetada
             const oldScript = document.getElementById('jsonp-ranking');
             if (oldScript) oldScript.remove();
         };
 
-        // Injeta script dinâmico (técnica JSONP imune a CORS)
         const oldScript = document.getElementById('jsonp-ranking');
         if (oldScript) oldScript.remove();
 
@@ -1121,10 +1204,10 @@
         }
 
         let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
-        csvContent += "Nome;Empresa;Email;Pares;Tempo(s);Completou;Data\n";
+        csvContent += "Nome;Empresa;Email;Pares;Tempo(s);Completou;Premio;Data\n";
 
         data.forEach(row => {
-            csvContent += `"${row.name}";"${row.company}";"${row.email}";"${row.pairs}";"${row.time}";"${row.completed ? 'SIM' : 'NÃO'}";"${row.date}"\n`;
+            csvContent += `"${row.name}";"${row.company}";"${row.email}";"${row.pairs}";"${row.time}";"${row.completed ? 'SIM' : 'NÃO'}";"${row.prize || ''}";"${row.date}"\n`;
         });
 
         const encodedUri = encodeURI(csvContent);
@@ -1136,11 +1219,9 @@
         document.body.removeChild(link);
     }
 
-    // Renderiza o que já tem em cache imediatamente (sem tela em branco)
+    // Inicialização
     renderLeaderboards();
     resetIdleTimer();
-
-    // Busca os dados atualizados da planilha na nuvem
     fetchOnlineRanking();
 </script>
 </body>
