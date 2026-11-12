@@ -46,7 +46,7 @@
             width: 100%;
             height: 100vh;
             max-width: 640px;
-            padding: 8px 14px; /* Padding reduzido no topo/baixo */
+            padding: 8px 14px;
             display: flex;
             flex-direction: column;
             position: relative;
@@ -58,13 +58,13 @@
             width: 100%;
             height: 100%;
             flex-direction: column;
-            justify-content: flex-start; /* Sobe o conteúdo eliminando o vão superior */
+            justify-content: flex-start;
             align-items: center;
             animation: fadeIn 0.3s ease-out;
         }
 
         .screen.active { display: flex; }
-        /* Bloco do Topo com Logo e Nome */
+
         .brand-header {
             display: flex;
             flex-direction: column;
@@ -74,7 +74,7 @@
         }
 
         .brand-logo {
-            height: 105px; /* Tamanho ampliado com mais destaque */
+            height: 105px;
             width: auto;
             object-fit: contain;
             margin-bottom: 8px;
@@ -88,13 +88,13 @@
             text-transform: uppercase;
             letter-spacing: 4px;
             line-height: 1;
-            color: #ffffff; /* INFINITY em branco puro */
+            color: #ffffff;
             text-align: center;
             cursor: pointer;
         }
 
         .title .corp-highlight {
-            color: #0096d6; /* Azul exato da sua identidade visual */
+            color: #0096d6;
             text-shadow: 0 0 20px rgba(0, 150, 214, 0.4);
         }
 
@@ -156,9 +156,10 @@
             align-items: center;
             background: var(--surface);
             border: 1px solid var(--surface-border);
-            padding: 8px 16px;
-            border-radius: 14px;
-            margin-bottom: 8px;
+            padding: 6px 14px;
+            border-radius: 12px;
+            margin-bottom: 6px;
+            flex-shrink: 0;
         }
 
         .timer-display {
@@ -189,26 +190,13 @@
             height: 100%;
         }
 
-        .hud {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--surface);
-            border: 1px solid var(--surface-border);
-            padding: 6px 14px;
-            border-radius: 12px;
-            margin-bottom: 6px;
-            flex-shrink: 0; /* Nunca encolhe o HUD */
-        }
-
         .grid-container {
             width: 100%;
-            height: calc(100% - 70px); /* Garante que o grid use rigorosamente o espaço que sobra sem transbordar */
+            height: calc(100% - 70px);
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             grid-template-rows: repeat(8, 1fr);
-            gap: 5px; /* Gap ajustado para caber perfeito */
+            gap: 5px;
             perspective: 1000px;
         }
 
@@ -248,8 +236,16 @@
             filter: drop-shadow(0 2px 8px rgba(0, 150, 214, 0.35));
         }
 
-        .card-front { background: #ffffff; transform: rotateY(180deg); }
-        .card-front img { width: 65%; height: 65%; object-fit: contain; }
+        .card-front { 
+            background: #ffffff; 
+            transform: rotateY(180deg);
+        }
+        .card-front svg { 
+            width: 58%; 
+            height: 58%; 
+            max-width: 52px;
+            max-height: 52px;
+        }
         .card-front span {
             font-size: 0.55rem;
             font-weight: 800;
@@ -257,7 +253,7 @@
             text-transform: uppercase;
             text-align: center;
             line-height: 1;
-            margin-top: 2px;
+            margin-top: 3px;
             max-width: 90%;
             white-space: nowrap;
             overflow: hidden;
@@ -338,17 +334,9 @@
             padding: 4px;
         }
 
-        .ranking-list::-webkit-scrollbar {
-            width: 4px;
-        }
-        .ranking-list::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 4px;
-        }
-        .ranking-list::-webkit-scrollbar-thumb {
-            background: rgba(0, 229, 255, 0.3);
-            border-radius: 4px;
-        }
+        .ranking-list::-webkit-scrollbar { width: 4px; }
+        .ranking-list::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.02); border-radius: 4px; }
+        .ranking-list::-webkit-scrollbar-thumb { background: rgba(0, 229, 255, 0.3); border-radius: 4px; }
 
         .ranking-item {
             display: flex;
@@ -361,9 +349,7 @@
             gap: 10px;
         }
 
-        .ranking-item:last-child {
-            border-bottom: none;
-        }
+        .ranking-item:last-child { border-bottom: none; }
 
         .rank-info {
             display: flex;
@@ -389,10 +375,7 @@
             max-width: 130px;
         }
 
-        .rank-sep {
-            color: var(--text-dim);
-            opacity: 0.5;
-        }
+        .rank-sep { color: var(--text-dim); opacity: 0.5; }
 
         .rank-company {
             color: var(--text-dim);
@@ -526,19 +509,19 @@
         .showcase-item {
             width: 100px;
             height: 100px;
-            background: rgba(255, 255, 255, 0.05);
+            background: #ffffff;
             border: 1px solid var(--surface-border);
             border-radius: 12px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 10px;
+            padding: 8px;
         }
 
-        .showcase-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
+        .showcase-item svg {
+            width: 65px;
+            height: 65px;
         }
 
         .touch-prompt {
@@ -613,7 +596,7 @@
             from { opacity: 0; transform: translateY(6px); }
             to { opacity: 1; transform: translateY(0); }
         }
-                /* Banner de Memorização no HUD */
+
         .memo-banner {
             font-family: 'Rajdhani', sans-serif;
             font-size: 1.25rem;
@@ -623,7 +606,6 @@
             letter-spacing: 2px;
             animation: pulseAlert 0.5s infinite alternate;
         }
-
     </style>
 </head>
 <body>
@@ -656,7 +638,6 @@
 
     <!-- TELA 1: CADASTRO COM RANKING VISÍVEL -->
     <div id="screen-start" class="screen active">
-                <!-- CABEÇALHO DA MARCA COM LOGO ACIMA -->
         <div class="brand-header">
             <img src="logo.png" alt="Infinity Logo" class="brand-logo">
             <h1 class="title" id="admin-export-trigger">INFINITY<span class="corp-highlight">CORP</span></h1>
@@ -697,7 +678,6 @@
                 <span style="font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; display: block;">Pares</span>
                 <strong id="matches-display" style="font-size: 1.25rem;">0 / 16</strong>
             </div>
-            <!-- Aviso que aparecerá no centro enquanto as cartas estiverem abertas -->
             <div id="memo-notice" class="memo-banner" style="display: none;">MEMORIZE! (3s)</div>
             <div id="timer" class="timer-display timer-stage-green">45.0s</div>
         </div>
@@ -708,28 +688,24 @@
     <!-- TELA 3: RESULTADO -->
     <div id="screen-end" class="screen">
         <h2 class="title" style="font-size: 1.9rem; margin-bottom: 2px;">Obrigado por Jogar com a Gente!</h2>
-<br>        
-        <!-- Posição Conquistada -->
+        <br>        
         <div class="player-rank-box">
             <span>Sua Posição no Desafio</span>
             <strong id="player-position-display">#-- LUGAR</strong>
         </div>
-<br>
-        <!-- Medalha / Premiação -->
+        <br>
         <div id="prize-badge-box" class="badge-prize-box prize-none" style="margin: 4px 0 8px 0;">
             <span id="prize-icon"></span>
             <span id="prize-text">Sem Premiação</span>
         </div>
 
         <p id="result-summary" style="color: var(--text-dim); font-size: 0.85rem; margin-bottom: 8px; text-align: center;"></p>
-<br>
-        <!-- Ranking com Scroll Limpo -->
+        <br>
         <div class="ranking-container" style="margin-top:0;">
             <span class="ranking-title-label">Líderes do Desafio</span>
             <div class="ranking-list" id="end-ranking-list"></div>
         </div>
 
-        <!-- Botão com Contador Regressivo e Trava -->
         <button id="btn-next-player" class="btn-action" style="margin-top: 10px;" onclick="backToStart()">
             Próximo Participante (30s)
         </button>
@@ -738,75 +714,74 @@
 </div>
 
 <script>
-    // Catálogo de Produtos
+    // Catálogo 100% Vetorial Nativo (Garante compatibilidade total em totens e offline)
     const CATALOG = [
         { 
             name: "Impressora A4", 
-            img: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect x="18" y="6" width="28" height="16" rx="2" fill="%23cbd5e1" stroke="%23334155" stroke-width="2"/><rect x="8" y="20" width="48" height="24" rx="4" fill="%230284c7" stroke="%230369a1" stroke-width="2"/><rect x="16" y="34" width="32" height="22" rx="2" fill="%23ffffff" stroke="%23334155" stroke-width="2"/><line x1="22" y1="42" x2="42" y2="42" stroke="%2394a3b8" stroke-width="2"/><line x1="22" y1="48" x2="36" y2="48" stroke="%2394a3b8" stroke-width="2"/><circle cx="48" cy="28" r="2.5" fill="%2322c55e"/></svg>` 
+            svg: `<svg viewBox="0 0 64 64"><rect x="18" y="6" width="28" height="16" rx="2" fill="#cbd5e1" stroke="#334155" stroke-width="2"/><rect x="8" y="20" width="48" height="24" rx="4" fill="#0284c7" stroke="#0369a1" stroke-width="2"/><rect x="16" y="34" width="32" height="22" rx="2" fill="#ffffff" stroke="#334155" stroke-width="2"/><line x1="22" y1="42" x2="42" y2="42" stroke="#94a3b8" stroke-width="2"/><line x1="22" y1="48" x2="36" y2="48" stroke="#94a3b8" stroke-width="2"/><circle cx="48" cy="28" r="2.5" fill="#22c55e"/></svg>` 
         },
         { 
             name: "Multifuncional A3", 
-            img: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect x="12" y="10" width="40" height="22" rx="3" fill="%230369a1" stroke="%230f172a" stroke-width="2"/><rect x="8" y="24" width="48" height="10" rx="1" fill="%2338bdf8"/><rect x="10" y="34" width="44" height="20" rx="2" fill="%231e293b" stroke="%230f172a" stroke-width="2"/><rect x="18" y="40" width="28" height="10" rx="1" fill="%23475569"/><rect x="42" y="14" width="8" height="6" rx="1" fill="%2322c55e"/><rect x="22" y="4" width="20" height="8" rx="1" fill="%23f8fafc"/></svg>` 
+            svg: `<svg viewBox="0 0 64 64"><rect x="12" y="10" width="40" height="22" rx="3" fill="#0369a1" stroke="#0f172a" stroke-width="2"/><rect x="8" y="24" width="48" height="10" rx="1" fill="#38bdf8"/><rect x="10" y="34" width="44" height="20" rx="2" fill="#1e293b" stroke="#0f172a" stroke-width="2"/><rect x="18" y="40" width="28" height="10" rx="1" fill="#475569"/><rect x="42" y="14" width="8" height="6" rx="1" fill="#22c55e"/><rect x="22" y="4" width="20" height="8" rx="1" fill="#f8fafc"/></svg>` 
         },
         { 
             name: "Notebook", 
-            img: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect x="12" y="14" width="40" height="26" rx="3" fill="%231e293b" stroke="%23475569" stroke-width="2"/><rect x="15" y="17" width="34" height="20" rx="1" fill="%230284c7"/><path d="M4 44h56l-4 6H8z" fill="%2364748b" stroke="%23334155" stroke-width="2"/><rect x="26" y="45" width="12" height="3" rx="1" fill="%23cbd5e1"/></svg>` 
+            svg: `<svg viewBox="0 0 64 64"><rect x="12" y="14" width="40" height="26" rx="3" fill="#1e293b" stroke="#475569" stroke-width="2"/><rect x="15" y="17" width="34" height="20" rx="1" fill="#0284c7"/><path d="M4 44h56l-4 6H8z" fill="#64748b" stroke="#334155" stroke-width="2"/><rect x="26" y="45" width="12" height="3" rx="1" fill="#cbd5e1"/></svg>` 
         },
         { 
             name: "Totem Touch", 
-            img: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect x="20" y="4" width="24" height="44" rx="4" fill="%230f172a" stroke="%230284c7" stroke-width="2"/><rect x="23" y="7" width="18" height="34" rx="2" fill="%2338bdf8"/><circle cx="32" cy="44" r="2" fill="%2338bdf8"/><rect x="29" y="48" width="6" height="8" fill="%23334155"/><rect x="16" y="56" width="32" height="4" rx="2" fill="%230f172a"/></svg>` 
+            svg: `<svg viewBox="0 0 64 64"><rect x="20" y="4" width="24" height="44" rx="4" fill="#0f172a" stroke="#0284c7" stroke-width="2"/><rect x="23" y="7" width="18" height="34" rx="2" fill="#38bdf8"/><circle cx="32" cy="44" r="2" fill="#38bdf8"/><rect x="29" y="48" width="6" height="8" fill="#334155"/><rect x="16" y="56" width="32" height="4" rx="2" fill="#0f172a"/></svg>` 
         },
         { 
             name: "Servidor", 
-            img: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect x="10" y="8" width="44" height="14" rx="2" fill="%231e293b" stroke="%23334155" stroke-width="2"/><circle cx="16" cy="15" r="2" fill="%2322c55e"/><rect x="24" y="13" width="22" height="4" fill="%230f172a"/><rect x="10" y="25" width="44" height="14" rx="2" fill="%231e293b" stroke="%23334155" stroke-width="2"/><circle cx="16" cy="32" r="2" fill="%2322c55e"/><rect x="24" y="30" width="22" height="4" fill="%230f172a"/><rect x="10" y="42" width="44" height="14" rx="2" fill="%231e293b" stroke="%23334155" stroke-width="2"/><circle cx="16" cy="49" r="2" fill="%2338bdf8"/><rect x="24" y="47" width="22" height="4" fill="%230f172a"/></svg>` 
+            svg: `<svg viewBox="0 0 64 64"><rect x="10" y="8" width="44" height="14" rx="2" fill="#1e293b" stroke="#334155" stroke-width="2"/><circle cx="16" cy="15" r="2" fill="#22c55e"/><rect x="24" y="13" width="22" height="4" fill="#0f172a"/><rect x="10" y="25" width="44" height="14" rx="2" fill="#1e293b" stroke="#334155" stroke-width="2"/><circle cx="16" cy="32" r="2" fill="#22c55e"/><rect x="24" y="30" width="22" height="4" fill="#0f172a"/><rect x="10" y="42" width="44" height="14" rx="2" fill="#1e293b" stroke="#334155" stroke-width="2"/><circle cx="16" cy="49" r="2" fill="#38bdf8"/><rect x="24" y="47" width="22" height="4" fill="#0f172a"/></svg>` 
         },
         { 
             name: "Desktop", 
-            img: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect x="6" y="10" width="34" height="26" rx="2" fill="%231e293b" stroke="%23475569" stroke-width="2"/><rect x="9" y="13" width="28" height="20" fill="%230284c7"/><path d="M19 36h8v8h-8zM14 44h18v3H14z" fill="%2364748b"/><rect x="44" y="10" width="14" height="37" rx="2" fill="%230f172a" stroke="%23334155" stroke-width="2"/><circle cx="51" cy="16" r="2" fill="%2322c55e"/><line x1="48" y1="24" x2="54" y2="24" stroke="%23475569" stroke-width="2"/></svg>` 
+            svg: `<svg viewBox="0 0 64 64"><rect x="6" y="10" width="34" height="26" rx="2" fill="#1e293b" stroke="#475569" stroke-width="2"/><rect x="9" y="13" width="28" height="20" fill="#0284c7"/><path d="M19 36h8v8h-8zM14 44h18v3H14z" fill="#64748b"/><rect x="44" y="10" width="14" height="37" rx="2" fill="#0f172a" stroke="#334155" stroke-width="2"/><circle cx="51" cy="16" r="2" fill="#22c55e"/><line x1="48" y1="24" x2="54" y2="24" stroke="#475569" stroke-width="2"/></svg>` 
         },
         { 
             name: "Impressora Térmica", 
-            img: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect x="12" y="24" width="40" height="28" rx="4" fill="%231e293b" stroke="%23334155" stroke-width="2"/><rect x="16" y="28" width="32" height="5" rx="1" fill="%230f172a"/><path d="M20 28V8h24v20l-4-3-4 3-4-3-4 3-4-3z" fill="%23f8fafc" stroke="%23cbd5e1" stroke-width="1.5"/><line x1="24" y1="14" x2="38" y2="14" stroke="%2394a3b8" stroke-width="2"/><line x1="24" y1="18" x2="34" y2="18" stroke="%2394a3b8" stroke-width="2"/><circle cx="44" cy="40" r="3" fill="%2322c55e"/></svg>` 
+            svg: `<svg viewBox="0 0 64 64"><rect x="12" y="24" width="40" height="28" rx="4" fill="#1e293b" stroke="#334155" stroke-width="2"/><rect x="16" y="28" width="32" height="5" rx="1" fill="#0f172a"/><path d="M20 28V8h24v20l-4-3-4 3-4-3-4 3-4-3z" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/><line x1="24" y1="14" x2="38" y2="14" stroke="#94a3b8" stroke-width="2"/><line x1="24" y1="18" x2="34" y2="18" stroke="#94a3b8" stroke-width="2"/><circle cx="44" cy="40" r="3" fill="#22c55e"/></svg>` 
         },
         { 
             name: "Scanner de Mesa", 
-            img: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect x="6" y="32" width="52" height="20" rx="3" fill="%231e293b" stroke="%23334155" stroke-width="2"/><rect x="12" y="36" width="40" height="12" fill="%230284c7" opacity="0.4"/><line x1="24" y1="36" x2="24" y2="48" stroke="%2338bdf8" stroke-width="3"/><path d="M8 32l16-20h34l-16 20z" fill="%23cbd5e1" stroke="%2394a3b8" stroke-width="2"/><circle cx="50" cy="42" r="2.5" fill="%2322c55e"/></svg>` 
+            svg: `<svg viewBox="0 0 64 64"><rect x="6" y="32" width="52" height="20" rx="3" fill="#1e293b" stroke="#334155" stroke-width="2"/><rect x="12" y="36" width="40" height="12" fill="#0284c7" opacity="0.4"/><line x1="24" y1="36" x2="24" y2="48" stroke="#38bdf8" stroke-width="3"/><path d="M8 32l16-20h34l-16 20z" fill="#cbd5e1" stroke="#94a3b8" stroke-width="2"/><circle cx="50" cy="42" r="2.5" fill="#22c55e"/></svg>` 
         },
         { 
             name: "Tablet", 
-            img: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect x="14" y="6" width="36" height="52" rx="4" fill="%230f172a" stroke="%23475569" stroke-width="2"/><rect x="18" y="12" width="28" height="40" rx="1" fill="%230284c7"/><circle cx="32" cy="9" r="1.5" fill="%2364748b"/></svg>` 
+            svg: `<svg viewBox="0 0 64 64"><rect x="14" y="6" width="36" height="52" rx="4" fill="#0f172a" stroke="#475569" stroke-width="2"/><rect x="18" y="12" width="28" height="40" rx="1" fill="#0284c7"/><circle cx="32" cy="9" r="1.5" fill="#64748b"/></svg>` 
         },
         { 
             name: "Roteador Wi-Fi", 
-            img: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><line x1="18" y1="34" x2="18" y2="14" stroke="%230284c7" stroke-width="3" stroke-linecap="round"/><line x1="46" y1="34" x2="46" y2="14" stroke="%230284c7" stroke-width="3" stroke-linecap="round"/><rect x="10" y="34" width="44" height="18" rx="4" fill="%231e293b" stroke="%23334155" stroke-width="2"/><circle cx="18" cy="43" r="2" fill="%2322c55e"/><circle cx="26" cy="43" r="2" fill="%2322c55e"/><circle cx="34" cy="43" r="2" fill="%2322c55e"/><circle cx="42" cy="43" r="2" fill="%2338bdf8"/></svg>` 
+            svg: `<svg viewBox="0 0 64 64"><line x1="18" y1="34" x2="18" y2="14" stroke="#0284c7" stroke-width="3" stroke-linecap="round"/><line x1="46" y1="34" x2="46" y2="14" stroke="#0284c7" stroke-width="3" stroke-linecap="round"/><rect x="10" y="34" width="44" height="18" rx="4" fill="#1e293b" stroke="#334155" stroke-width="2"/><circle cx="18" cy="43" r="2" fill="#22c55e"/><circle cx="26" cy="43" r="2" fill="#22c55e"/><circle cx="34" cy="43" r="2" fill="#22c55e"/><circle cx="42" cy="43" r="2" fill="#38bdf8"/></svg>` 
         },
         { 
             name: "No-Break", 
-            img: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect x="18" y="8" width="28" height="48" rx="4" fill="%230f172a" stroke="%23334155" stroke-width="2"/><circle cx="32" cy="18" r="4" fill="%2322c55e"/><path d="M34 26l-6 10h6l-2 10 8-12h-6z" fill="%23facc15"/><line x1="24" y1="50" x2="40" y2="50" stroke="%23334155" stroke-width="2"/></svg>` 
+            svg: `<svg viewBox="0 0 64 64"><rect x="18" y="8" width="28" height="48" rx="4" fill="#0f172a" stroke="#334155" stroke-width="2"/><circle cx="32" cy="18" r="4" fill="#22c55e"/><path d="M34 26l-6 10h6l-2 10 8-12h-6z" fill="#facc15"/><line x1="24" y1="50" x2="40" y2="50" stroke="#334155" stroke-width="2"/></svg>` 
         },
         { 
             name: "Monitor", 
-            img: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect x="8" y="8" width="48" height="34" rx="3" fill="%230f172a" stroke="%23475569" stroke-width="2"/><rect x="11" y="11" width="42" height="28" fill="%230284c7"/><path d="M28 42h8v10h-8zM20 52h24v4H20z" fill="%2364748b"/></svg>` 
+            svg: `<svg viewBox="0 0 64 64"><rect x="8" y="8" width="48" height="34" rx="3" fill="#0f172a" stroke="#475569" stroke-width="2"/><rect x="11" y="11" width="42" height="28" fill="#0284c7"/><path d="M28 42h8v10h-8zM20 52h24v4H20z" fill="#64748b"/></svg>` 
         },
         { 
             name: "Nuvem", 
-            img: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path d="M46 44h-28a12 12 0 01-2-23.8 16 16 0 0131-4.2A11 11 0 0146 44z" fill="%230284c7" stroke="%230369a1" stroke-width="2"/><rect x="22" y="32" width="20" height="16" rx="2" fill="%231e293b"/><circle cx="26" cy="36" r="1.5" fill="%2322c55e"/><circle cx="26" cy="42" r="1.5" fill="%2322c55e"/></svg>` 
+            svg: `<svg viewBox="0 0 64 64"><path d="M46 44h-28a12 12 0 01-2-23.8 16 16 0 0131-4.2A11 11 0 0146 44z" fill="#0284c7" stroke="#0369a1" stroke-width="2"/><rect x="22" y="32" width="20" height="16" rx="2" fill="#1e293b"/><circle cx="26" cy="36" r="1.5" fill="#22c55e"/><circle cx="26" cy="42" r="1.5" fill="#22c55e"/></svg>` 
         },
         { 
             name: "Headset", 
-            img: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path d="M14 36v-8a18 18 0 0136 0v8" fill="none" stroke="%23334155" stroke-width="4" stroke-linecap="round"/><rect x="10" y="32" width="8" height="16" rx="3" fill="%230284c7"/><rect x="46" y="32" width="8" height="16" rx="3" fill="%230284c7"/><path d="M14 44h10v6h-6" fill="none" stroke="%2338bdf8" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="50" r="3" fill="%2338bdf8"/></svg>` 
+            svg: `<svg viewBox="0 0 64 64"><path d="M14 36v-8a18 18 0 0136 0v8" fill="none" stroke="#334155" stroke-width="4" stroke-linecap="round"/><rect x="10" y="32" width="8" height="16" rx="3" fill="#0284c7"/><rect x="46" y="32" width="8" height="16" rx="3" fill="#0284c7"/><path d="M14 44h10v6h-6" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="50" r="3" fill="#38bdf8"/></svg>` 
         },
         { 
             name: "Leitor Biométrico", 
-            img: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect x="12" y="6" width="40" height="52" rx="6" fill="%230f172a" stroke="%230284c7" stroke-width="2"/><path d="M32 18a10 10 0 00-10 10v6M32 24a4 4 0 00-4 4v8M32 30a1 1 0 00-1 1v12M38 28v12M42 22a10 10 0 012 6v8" fill="none" stroke="%2338bdf8" stroke-width="2.5" stroke-linecap="round"/></svg>` 
+            svg: `<svg viewBox="0 0 64 64"><rect x="12" y="6" width="40" height="52" rx="6" fill="#0f172a" stroke="#0284c7" stroke-width="2"/><path d="M32 18a10 10 0 00-10 10v6M32 24a4 4 0 00-4 4v8M32 30a1 1 0 00-1 1v12M38 28v12M42 22a10 10 0 012 6v8" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/></svg>` 
         },
         { 
             name: "Celular", 
-            img: `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect x="18" y="6" width="28" height="52" rx="4" fill="%230f172a" stroke="%23475569" stroke-width="2"/><rect x="21" y="12" width="22" height="40" fill="%230284c7"/><circle cx="32" cy="9" r="1" fill="%2364748b"/></svg>` 
+            svg: `<svg viewBox="0 0 64 64"><rect x="18" y="6" width="28" height="52" rx="4" fill="#0f172a" stroke="#475569" stroke-width="2"/><rect x="21" y="12" width="22" height="40" fill="#0284c7"/><circle cx="32" cy="9" r="1" fill="#64748b"/></svg>` 
         }
     ];
 
-    // SVGs Vetoriais de Alta Definição
     const ICONS = {
         gold: `<svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6" fill="#ffd700"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>`,
         silver: `<svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6" fill="#e2e8f0"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>`,
@@ -830,7 +805,6 @@
     let endCountdownTimer = null;
     let endCountdownSeconds = 30;
 
-    // --- CONTROLE DE TELAS & STANDBY ---
     function setScreen(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
@@ -853,7 +827,7 @@
 
         slider.innerHTML = samples.map(p => `
             <div class="showcase-item">
-                <img src="${p.img}" alt="${p.name}">
+                ${p.svg}
             </div>
         `).join('');
 
@@ -870,7 +844,6 @@
         window.addEventListener(evt, resetIdleTimer, { passive: true });
     });
 
-    // --- VALIDAÇÃO & INÍCIO ---
     function validateAndStart() {
         const name = document.getElementById('player-name').value.trim();
         const company = document.getElementById('player-company').value.trim();
@@ -903,18 +876,13 @@
         matchedPairs = 0;
         elapsedSeconds = 0.0;
         flippedCards = [];
-        isBoardLocked = true; // Trava cliques durante o preview de 3s
+        isBoardLocked = true;
 
         document.getElementById('timer').innerText = '45.0s';
         document.getElementById('matches-display').innerText = '0 / 16';
 
-        // 1. Monta o tabuleiro com as cartas já reveladas
         createPreviewBoard();
-
-        // 2. Transiciona para a tela do jogo
         setScreen('screen-game');
-
-        // 3. Roda a contagem regressiva de 3s (3.. 2.. 1.. VALENDO!)
         runPreparationCountdown();
     }
 
@@ -922,12 +890,10 @@
         const grid = document.getElementById('grid');
         grid.innerHTML = '';
 
-        // Embaralha as 16 duplas (32 cartas)
         const deck = shuffle([...CATALOG, ...CATALOG]);
 
         deck.forEach((item) => {
             const card = document.createElement('div');
-            // Começa 'flipped' para memorização
             card.className = 'card flipped';
             card.dataset.name = item.name;
 
@@ -936,7 +902,7 @@
                     <img src="logo.png" alt="Infinity Logo" class="card-back-logo">
                 </div>
                 <div class="card-face card-front">
-                    <img src="${item.img}" alt="${item.name}">
+                    ${item.svg}
                     <span>${item.name}</span>
                 </div>
             `;
@@ -946,14 +912,12 @@
         });
     }
 
-
     function runPreparationCountdown() {
         const overlay = document.getElementById('countdown-overlay');
         const countDisplay = document.getElementById('countdown-number');
         const memoNotice = document.getElementById('memo-notice');
         const timerEl = document.getElementById('timer');
 
-        // FASE 1: Contagem de Preparação no Overlay (3, 2, 1)
         overlay.classList.add('active');
         let prepCount = 3;
         countDisplay.style.fontSize = "7rem";
@@ -966,11 +930,8 @@
                 countDisplay.innerText = prepCount;
             } else {
                 clearInterval(prepInterval);
-                
-                // 1. Remove o overlay escuro para o jogador ver o tabuleiro 100% limpo
                 overlay.classList.remove('active');
 
-                // FASE 2: Período de Memorização com Cartas Abertas (3 segundos)
                 let memoSeconds = 4;
                 memoNotice.style.display = 'block';
                 memoNotice.innerText = `MEMORIZE! (${memoSeconds}s)`;
@@ -985,13 +946,12 @@
                         clearInterval(memoInterval);
                         memoNotice.style.display = 'none';
 
-                        // FASE 3: Vira as cartas para baixo e dá a largada!
                         const allCards = document.querySelectorAll('.card');
                         allCards.forEach(c => c.classList.remove('flipped'));
 
                         setTimeout(() => {
                             isBoardLocked = false;
-                            startTimer(); // Inicia os 45 segundos oficiais
+                            startTimer();
                         }, 350);
                     }
                 }, 1000);
@@ -999,7 +959,6 @@
         }, 1000);
     }
 
-    // --- CRONÔMETRO OFICIAL DE 45 SEGUNDOS ---
     function startTimer() {
         clearInterval(timerInterval);
         const startTime = Date.now();
@@ -1070,7 +1029,6 @@
         }
     }
 
-    // --- ENCERRAMENTO DO JOGO ---
     function endGame() {
         clearInterval(timerInterval);
         setScreen('screen-end');
@@ -1113,14 +1071,11 @@
             summary.innerText = `${currentPlayer.name} (${currentPlayer.company}) - Fez ${matchedPairs} de 16 pares em 45s.`;
         }
 
-        // 1. Salva e pega posição no ranking
         const playerRank = saveRecord(finalTime, matchedPairs, finishedAll, prizeName);
         document.getElementById('player-position-display').innerText = `#${playerRank}º LUGAR`;
 
-        // 2. Renderiza leaderboards
         renderLeaderboards();
 
-        // 3. Sincroniza em segundo plano com a planilha Google
         sendToGoogleSheets({
             name: currentPlayer.name,
             company: currentPlayer.company,
@@ -1131,7 +1086,6 @@
             completed: finishedAll
         });
 
-        // 4. Inicia contagem de 30s com trava inicial de segurança de 5s
         startEndScreenCountdown();
     }
 
@@ -1293,7 +1247,6 @@
         document.body.appendChild(script);
     }
 
-    // --- ATALHO SECRETO: 5 TOQUES NO TÍTULO BAIXAM O CSV ---
     let tapCount = 0;
     let tapTimer = null;
     document.getElementById('admin-export-trigger').addEventListener('click', () => {
