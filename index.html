@@ -44,13 +44,13 @@
 
         .totem-container {
             width: 100%;
-            height: 100%;
+            height: 100vh;
             max-width: 640px;
-            padding: 16px 14px;
+            padding: 8px 14px; /* Padding reduzido no topo/baixo */
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
             position: relative;
+            overflow: hidden;
         }
 
         .screen {
@@ -58,7 +58,7 @@
             width: 100%;
             height: 100%;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start; /* Sobe o conteúdo eliminando o vão superior */
             align-items: center;
             animation: fadeIn 0.3s ease-out;
         }
@@ -183,14 +183,32 @@
             to { transform: scale(1.08); }
         }
 
-        /* --- Grid 4x8 --- */
+        /* --- Grid 4x8 Enquadrado no Totem --- */
+        #screen-game {
+            justify-content: flex-start;
+            height: 100%;
+        }
+
+        .hud {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            padding: 6px 14px;
+            border-radius: 12px;
+            margin-bottom: 6px;
+            flex-shrink: 0; /* Nunca encolhe o HUD */
+        }
+
         .grid-container {
-            flex: 1;
+            width: 100%;
+            height: calc(100% - 70px); /* Garante que o grid use rigorosamente o espaço que sobra sem transbordar */
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             grid-template-rows: repeat(8, 1fr);
-            gap: 6px;
-            width: 100%;
+            gap: 5px; /* Gap ajustado para caber perfeito */
             perspective: 1000px;
         }
 
@@ -648,7 +666,7 @@
         <p style="color: var(--text-dim); font-size: 0.85rem; text-align: center;">
             Desafio de 45s: Memorize e conquiste sua premiação.
         </p>
-<br>
+
         <div class="form-card">
             <div class="form-group">
                 <label>Nome Completo</label>
@@ -663,9 +681,9 @@
                 <input type="email" id="player-email" class="form-input" placeholder="Ex: email@empresa.com.br" autocomplete="off">
             </div>
         </div>
-<br>
+
         <button class="btn-action" onclick="validateAndStart()">Iniciar Desafio</button>
-<br>
+
         <div class="ranking-container">
             <span class="ranking-title-label">Líderes do Desafio</span>
             <div class="ranking-list" id="start-ranking-list"></div>
