@@ -507,6 +507,16 @@
             letter-spacing: 2px;
             text-shadow: 0 0 12px rgba(0, 229, 255, 0.5);
         }
+                /* Estilo do botão travado para evitar toques acidentais */
+        .btn-action:disabled,
+        .btn-action.btn-locked {
+            opacity: 0.45;
+            cursor: not-allowed;
+            pointer-events: none; /* Ignora qualquer toque no touch */
+            filter: grayscale(0.7);
+            box-shadow: none;
+            transform: none !important;
+        }
 
     </style>
 </head>
@@ -941,25 +951,60 @@
     }
 
     // Temporizador de 30 segundos na tela de encerramento
+    endCountdownTimer = null;
+    endCountdownSeconds = 30;
+    const LOCK_DELAY_SECONDS = 5; // Tempo de trava de segurança
+
     function startEndScreenCountdown() {
         clearInterval(endCountdownTimer);
         endCountdownSeconds = 30;
+        let lockSeconds = LOCK_DELAY_SECONDS;
+
         const btn = document.getElementById('btn-next-player');
-        btn.innerText = `Próximo Participante (${endCountdownSeconds}s)`;
+        
+        // 1. Trava o botão imediatamente
+        btn.disabled = true;
+        btn.classList.add('btn-locked');
+        btn.innerText = `Aguarde (${lockSeconds}s)...`;
 
         endCountdownTimer = setInterval(() => {
             endCountdownSeconds--;
+
+            // Controle da trava inicial de 5 segundos
+            if (lockSeconds > 0) {
+                lockSeconds--;
+                if (lockSeconds === 0) {
+                    // Libera o botão para toque
+                    btn.disabled = false;
+                    btn.classList.remove('btn-locked');
+                    btn.innerText = `Próximo Participante (${endCountdownSeconds}s)`;
+                } else {
+                    btn.innerText = `Aguarde (${lockSeconds}s)...`;
+                }
+            } else {
+                // Período liberado onde o clique é permitido
+                btn.innerText = `Próximo Participante (${endCountdownSeconds}s)`;
+            }
+
+            // Ao zerar os 30s totais, volta sozinho
             if (endCountdownSeconds <= 0) {
                 clearInterval(endCountdownTimer);
                 backToStart();
-            } else {
-                btn.innerText = `Próximo Participante (${endCountdownSeconds}s)`;
             }
         }, 1000);
     }
 
     function backToStart() {
         clearInterval(endCountdownTimer);
+        
+        // Garante que o botão volte ao estado normal para a próxima partida
+        const btn = document.getElementById('btn-next-player');
+        if (btn) {
+            btn.disabled = false;
+            btn.classList.remove('btn-locked');
+            btn.innerText = 'Próximo Participante (30s)';
+        }
+
         document.getElementById('player-name').value = '';
         document.getElementById('player-company').value = '';
         document.getElementById('player-email').value = '';
