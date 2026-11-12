@@ -74,11 +74,11 @@
         }
 
         .brand-logo {
-            height: 72px; /* Altura ideal proporcional para o totem vertical */
+            height: 105px; /* Tamanho ampliado com mais destaque */
             width: auto;
             object-fit: contain;
-            margin-bottom: 6px;
-            filter: drop-shadow(0 4px 12px rgba(0, 150, 214, 0.25));
+            margin-bottom: 8px;
+            filter: drop-shadow(0 4px 14px rgba(0, 150, 214, 0.35));
         }
 
         .title {
@@ -223,16 +223,11 @@
             justify-content: center;
             border: 1px solid rgba(0, 150, 214, 0.25);
         }
-        .card-back-brand {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 0.65rem;
-            font-weight: 800;
-            letter-spacing: 1px;
-            color: #ffffff;
-            text-transform: uppercase;
-        }
-        .card-back-brand span {
-            color: #0096d6;
+        .card-back-logo {
+            width: 65%;
+            height: 65%;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 8px rgba(0, 150, 214, 0.35));
         }
 
         .card-front { background: #ffffff; transform: rotateY(180deg); }
@@ -872,7 +867,7 @@
 
             card.innerHTML = `
                 <div class="card-face card-back">
-                    <span class="card-back-brand">INFINITY<span>CORP</span></span>
+                    <img src="logo.png" alt="Infinity Logo" class="card-back-logo">
                 </div>
                 <div class="card-face card-front">
                     <img src="${item.img}" alt="${item.name}">
