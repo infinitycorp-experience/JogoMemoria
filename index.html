@@ -64,20 +64,46 @@
         }
 
         .screen.active { display: flex; }
+        /* Bloco do Topo com Logo e Nome */
+        .brand-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+
+        .brand-logo {
+            height: 72px; /* Altura ideal proporcional para o totem vertical */
+            width: auto;
+            object-fit: contain;
+            margin-bottom: 6px;
+            filter: drop-shadow(0 4px 12px rgba(0, 150, 214, 0.25));
+        }
 
         .title {
             font-family: 'Rajdhani', sans-serif;
-            font-size: 2.8rem;
-            font-weight: 700;
+            font-size: 2.5rem;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 4px;
             line-height: 1;
-            margin-bottom: 6px;
-            background: linear-gradient(180deg, #fff, #94a3b8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #ffffff; /* INFINITY em branco puro */
             text-align: center;
             cursor: pointer;
+        }
+
+        .title .corp-highlight {
+            color: #0096d6; /* Azul exato da sua identidade visual */
+            text-shadow: 0 0 20px rgba(0, 150, 214, 0.4);
+        }
+
+        .brand-subtitle {
+            color: var(--text-dim);
+            font-size: 0.65rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-top: 4px;
         }
 
         .form-card {
@@ -190,9 +216,24 @@
             border: 1px solid var(--surface-border);
             padding: 4px;
         }
-
-        .card-back { background: linear-gradient(135deg, #162035, #0c1220); }
-        .card-back::after { content: "◆"; font-size: 1.1rem; color: var(--accent); opacity: 0.5; }
+        .card-back { 
+            background: linear-gradient(135deg, #162035, #0c1220); 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(0, 150, 214, 0.25);
+        }
+        .card-back-brand {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+        .card-back-brand span {
+            color: #0096d6;
+        }
 
         .card-front { background: #ffffff; transform: rotateY(180deg); }
         .card-front img { width: 65%; height: 65%; object-fit: contain; }
@@ -576,11 +617,11 @@
 
 <!-- SCREENSAVER / STANDBY -->
 <div id="screensaver" onclick="dismissScreensaver()">
-    <div class="screensaver-logo-box">
-        <h1 class="title" style="font-size: 3.5rem;">INFINITYCORP</h1>
-        <p style="color: var(--accent); letter-spacing: 2px;">SOLUÇÕES CORPORATIVAS DE TI & OUTSOURCING</p>
+    <div class="screensaver-logo-box brand-header">
+        <img src="logo.png" alt="Infinity Logo" class="brand-logo" style="height: 110px; margin-bottom: 12px;">
+        <h1 class="title" style="font-size: 3.2rem;">INFINITY<span class="corp-highlight">CORP</span></h1>
+        <p class="brand-subtitle" style="font-size: 0.8rem; margin-top: 6px;">Soluções Corporativas de TI & Outsourcing</p>
     </div>
-
     <div class="showcase-slider" id="showcase-slider"></div>
 
     <div style="width: 100%; max-width: 420px; text-align: center;">
@@ -602,7 +643,13 @@
 
     <!-- TELA 1: CADASTRO COM RANKING VISÍVEL -->
     <div id="screen-start" class="screen active">
-        <h1 class="title" id="admin-export-trigger">INFINITYCORP</h1>
+                <!-- CABEÇALHO DA MARCA COM LOGO ACIMA -->
+        <div class="brand-header">
+            <img src="logo.png" alt="Infinity Logo" class="brand-logo">
+            <h1 class="title" id="admin-export-trigger">INFINITY<span class="corp-highlight">CORP</span></h1>
+            <p class="brand-subtitle">Soluções Corporativas de TI & Outsourcing</p>
+        </div>
+
         <p style="color: var(--text-dim); font-size: 0.85rem; text-align: center;">
             Desafio de 45s: Memorize e conquiste sua premiação.
         </p>
@@ -824,7 +871,9 @@
             card.dataset.name = item.name;
 
             card.innerHTML = `
-                <div class="card-face card-back"></div>
+                <div class="card-face card-back">
+                    <span class="card-back-brand">INFINITY<span>CORP</span></span>
+                </div>
                 <div class="card-face card-front">
                     <img src="${item.img}" alt="${item.name}">
                     <span>${item.name}</span>
@@ -835,6 +884,7 @@
             grid.appendChild(card);
         });
     }
+
 
     function runPreparationCountdown() {
         const overlay = document.getElementById('countdown-overlay');
