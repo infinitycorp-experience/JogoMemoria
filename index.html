@@ -490,15 +490,11 @@
         }
 
         /* --- Card de Destaque da Posição --- */
-        .player-rank-box {
-            background: rgba(0, 229, 255, 0.08);
-            border: 1px solid rgba(0, 229, 255, 0.4);
-            border-radius: 12px;
-            padding: 6px 14px;
-            margin: 4px 0;
-            text-align: center;
-            width: 100%;
-            flex-shrink: 0;
+        /* Ajuste no container da tela final para distribuir o espaço */
+        #screen-end {
+            justify-content: center; /* Centraliza verticalmente se sobrar tela */
+            gap: 12px; /* Dá respiro automático entre cada bloco */
+            padding: 10px 0;
         }
 
         .player-rank-box span {
@@ -517,18 +513,49 @@
         }
 
         /* --- Badge de Premiação --- */
+        /* --- Card de Destaque da Posição --- */
+        .player-rank-box {
+            background: rgba(0, 229, 255, 0.08);
+            border: 1px solid rgba(0, 229, 255, 0.4);
+            border-radius: 14px;
+            padding: 12px 18px;
+            margin: 8px 0 6px 0;
+            text-align: center;
+            width: 100%;
+            flex-shrink: 0;
+            box-shadow: 0 4px 20px rgba(0, 229, 255, 0.1);
+        }
+
+        .player-rank-box span {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .player-rank-box strong {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 2.2rem;
+            color: var(--accent);
+            letter-spacing: 2.5px;
+            line-height: 1.1;
+        }
+
+        /* --- Badge de Premiação --- */
         .badge-prize-box {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            padding: 8px 20px;
-            border-radius: 40px;
+            gap: 12px;
+            padding: 12px 28px;
+            border-radius: 50px;
             font-weight: 800;
-            font-size: 1rem;
-            margin: 6px 0;
+            font-size: 1.05rem;
+            margin: 8px 0 4px 0;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             flex-shrink: 0;
         }
 
@@ -752,26 +779,31 @@
 
     <!-- TELA 3: RESULTADO -->
     <div id="screen-end" class="screen">
-        <h2 class="title" style="font-size: 1.8rem; margin-bottom: 2px;">Obrigado por Jogar!</h2>
+        <h2 class="title" style="font-size: 2.2rem; margin-bottom: 8px;">OBRIGADO POR JOGAR!</h2>
         
+        <!-- Posição Conquistada -->
         <div class="player-rank-box">
             <span>Sua Posição no Desafio</span>
             <strong id="player-position-display">#-- LUGAR</strong>
         </div>
 
+        <!-- Medalha / Premiação -->
         <div id="prize-badge-box" class="badge-prize-box prize-none">
             <span id="prize-icon"></span>
             <span id="prize-text">Sem Premiação</span>
         </div>
 
-        <p id="result-summary" style="color: var(--text-dim); font-size: 0.8rem; margin-bottom: 4px; text-align: center;"></p>
+        <!-- Resumo do Jogador com espaçamento acima e abaixo -->
+        <p id="result-summary" style="color: var(--text-dim); font-size: 0.95rem; margin: 10px 0 14px 0; text-align: center;"></p>
 
-        <div class="ranking-container">
+        <!-- Ranking de Líderes -->
+        <div class="ranking-container" style="margin-top: 4px;">
             <span class="ranking-title-label">Líderes do Desafio</span>
             <div class="ranking-list" id="end-ranking-list"></div>
         </div>
 
-        <button id="btn-next-player" class="btn-action" style="margin-top: 8px;" onclick="backToStart()">
+        <!-- Botão do Próximo -->
+        <button id="btn-next-player" class="btn-action" style="margin-top: 14px;" onclick="backToStart()">
             Próximo Participante (30s)
         </button>
     </div>
