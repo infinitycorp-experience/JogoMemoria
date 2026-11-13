@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Desafio Corporativo - INFINITYCORP</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     <style>
@@ -35,6 +35,7 @@
             color: var(--text);
             font-family: 'Inter', sans-serif;
             height: 100vh;
+            height: 100dvh; /* Altura exata em iOS e Android dinâmico */
             width: 100vw;
             overflow: hidden;
             display: flex;
@@ -42,17 +43,54 @@
             align-items: center;
         }
 
+        /* --- BOTÃO DISCRETO DE FULLSCREEN --- */
+        .btn-fullscreen {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 99999;
+            background: rgba(18, 24, 38, 0.6);
+            border: 1px solid var(--surface-border);
+            color: var(--accent);
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            opacity: 0.4;
+            transition: opacity 0.2s, background 0.2s;
+        }
+
+        .btn-fullscreen:hover, .btn-fullscreen:active {
+            opacity: 1;
+            background: rgba(18, 24, 38, 0.95);
+        }
+
+        .btn-fullscreen svg {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+        }
+
+        /* Container flexível */
         .totem-container {
             width: 100%;
-            height: 100vh;
-            max-width: 640px;
+            height: 100%;
+            max-width: 600px;
             padding: 8px 14px;
             display: flex;
             flex-direction: column;
             position: relative;
-            overflow: hidden;
+            overflow-y: auto;
+            overflow-x: hidden;
         }
 
+        /* Telas */
         .screen {
             display: none;
             width: 100%;
@@ -70,23 +108,24 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
+            flex-shrink: 0;
         }
 
         .brand-logo {
-            height: 105px;
+            height: clamp(65px, 9vh, 105px);
             width: auto;
             object-fit: contain;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             filter: drop-shadow(0 4px 14px rgba(0, 150, 214, 0.35));
         }
 
         .title {
             font-family: 'Rajdhani', sans-serif;
-            font-size: 2.5rem;
+            font-size: clamp(1.8rem, 4vh, 2.5rem);
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 4px;
+            letter-spacing: 3px;
             line-height: 1;
             color: #ffffff;
             text-align: center;
@@ -101,31 +140,32 @@
         .brand-subtitle {
             color: var(--text-dim);
             font-size: 0.65rem;
-            letter-spacing: 0.3em;
+            letter-spacing: 0.25em;
             text-transform: uppercase;
-            margin-top: 4px;
+            margin-top: 3px;
         }
 
         .form-card {
             background: var(--surface);
             border: 1px solid var(--surface-border);
-            border-radius: 16px;
-            padding: 16px 16px 10px 16px;
+            border-radius: 14px;
+            padding: 12px 14px 8px 14px;
             width: 100%;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            margin: 10px 0;
+            margin: 6px 0;
+            flex-shrink: 0;
         }
 
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 2px;
             text-align: left;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .form-group label {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 600;
             color: var(--accent);
             text-transform: uppercase;
@@ -134,12 +174,12 @@
 
         .form-input {
             width: 100%;
-            padding: 12px;
-            border-radius: 10px;
+            padding: 9px 12px;
+            border-radius: 8px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--surface-border);
             color: #fff;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             outline: none;
         }
 
@@ -164,7 +204,7 @@
 
         .timer-display {
             font-family: 'Rajdhani', sans-serif;
-            font-size: 2.6rem;
+            font-size: clamp(2rem, 4vh, 2.6rem);
             font-weight: 700;
             letter-spacing: 2px;
             transition: color 0.3s ease;
@@ -184,7 +224,7 @@
             to { transform: scale(1.08); }
         }
 
-        /* --- Grid 4x8 Enquadrado no Totem --- */
+        /* --- TABULEIRO VERTICAL PADRÃO (TOTEM & MOBILE VERTICAL: 4x8) --- */
         #screen-game {
             justify-content: flex-start;
             height: 100%;
@@ -192,12 +232,25 @@
 
         .grid-container {
             width: 100%;
-            height: calc(100% - 70px);
+            flex: 1;
+            min-height: 0; /* Previne estouro flexbox */
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             grid-template-rows: repeat(8, 1fr);
-            gap: 5px;
+            gap: 4px;
             perspective: 1000px;
+        }
+
+        /* --- ADAPTAÇÃO PARA COMPUTADOR / TELAS DEITADAS (LANDSCAPE / DESKTOP) --- */
+        @media (min-aspect-ratio: 1/1) {
+            .totem-container {
+                max-width: 980px;
+            }
+            .grid-container {
+                grid-template-columns: repeat(8, 1fr);
+                grid-template-rows: repeat(4, 1fr);
+                gap: 6px;
+            }
         }
 
         .card {
@@ -205,7 +258,8 @@
             cursor: pointer;
             transform-style: preserve-3d;
             transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border-radius: 8px;
+            border-radius: 6px;
+            min-height: 0;
         }
 
         .card.flipped, .card.matched { transform: rotateY(180deg); }
@@ -214,14 +268,16 @@
             position: absolute;
             inset: 0;
             backface-visibility: hidden;
-            border-radius: 8px;
+            border-radius: 6px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             border: 1px solid var(--surface-border);
-            padding: 4px;
+            padding: 2px;
+            overflow: hidden;
         }
+
         .card-back { 
             background: linear-gradient(135deg, #162035, #0c1220); 
             display: flex;
@@ -229,32 +285,36 @@
             justify-content: center;
             border: 1px solid rgba(0, 150, 214, 0.25);
         }
+
         .card-back-logo {
-            width: 65%;
-            height: 65%;
+            width: 60%;
+            height: 60%;
             object-fit: contain;
-            filter: drop-shadow(0 2px 8px rgba(0, 150, 214, 0.35));
+            filter: drop-shadow(0 2px 6px rgba(0, 150, 214, 0.35));
         }
 
         .card-front { 
             background: #ffffff; 
             transform: rotateY(180deg);
         }
+
         .card-front svg { 
-            width: 58%; 
-            height: 58%; 
-            max-width: 52px;
-            max-height: 52px;
+            width: 55%; 
+            height: 55%; 
+            max-width: 48px;
+            max-height: 48px;
+            flex-shrink: 0;
         }
+
         .card-front span {
-            font-size: 0.55rem;
+            font-size: clamp(0.48rem, 1.1vh, 0.65rem);
             font-weight: 800;
             color: #0f172a;
             text-transform: uppercase;
             text-align: center;
             line-height: 1;
-            margin-top: 3px;
-            max-width: 90%;
+            margin-top: 2px;
+            max-width: 94%;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -269,17 +329,18 @@
             background: linear-gradient(135deg, var(--accent) 0%, #0066ff 100%);
             color: #040812;
             font-family: 'Rajdhani', sans-serif;
-            font-size: 1.25rem;
+            font-size: 1.15rem;
             font-weight: 700;
             border: none;
-            padding: 14px 20px;
-            border-radius: 12px;
+            padding: 12px 18px;
+            border-radius: 10px;
             cursor: pointer;
             width: 100%;
             text-transform: uppercase;
             letter-spacing: 1.5px;
             box-shadow: 0 8px 25px rgba(0, 229, 255, 0.3);
             transition: all 0.2s ease;
+            flex-shrink: 0;
         }
 
         .btn-action:disabled,
@@ -295,29 +356,34 @@
         /* --- Rankings --- */
         .ranking-container {
             width: 100%;
-            margin-top: 14px;
+            margin-top: 8px;
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
         }
 
         .ranking-title-label {
             font-family: 'Rajdhani', sans-serif;
-            font-size: 1.25rem;
+            font-size: 1.1rem;
             font-weight: 700;
             color: var(--accent);
             text-transform: uppercase;
-            letter-spacing: 2.5px;
-            margin-bottom: 8px;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
             text-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+            flex-shrink: 0;
         }
 
         .ranking-title-label::before,
         .ranking-title-label::after {
             content: "";
             height: 1px;
-            width: 35px;
+            width: 30px;
             background: linear-gradient(90deg, transparent, var(--accent));
         }
         .ranking-title-label::after {
@@ -327,26 +393,27 @@
         .ranking-list {
             width: 100%;
             background: rgba(18, 24, 38, 0.95);
-            border-radius: 12px;
+            border-radius: 10px;
             border: 1px solid var(--surface-border);
-            max-height: 155px;
+            flex: 1;
+            min-height: 90px;
+            max-height: 140px;
             overflow-y: auto;
-            padding: 4px;
+            padding: 2px 4px;
         }
 
         .ranking-list::-webkit-scrollbar { width: 4px; }
-        .ranking-list::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.02); border-radius: 4px; }
         .ranking-list::-webkit-scrollbar-thumb { background: rgba(0, 229, 255, 0.3); border-radius: 4px; }
 
         .ranking-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 7px 12px;
+            padding: 6px 10px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             white-space: nowrap;
-            gap: 10px;
+            gap: 8px;
         }
 
         .ranking-item:last-child { border-bottom: none; }
@@ -354,7 +421,7 @@
         .rank-info {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -363,8 +430,8 @@
         .rank-pos {
             font-family: 'Rajdhani', sans-serif;
             font-weight: 700;
-            font-size: 0.95rem;
-            min-width: 26px;
+            font-size: 0.9rem;
+            min-width: 24px;
         }
 
         .rank-name {
@@ -379,7 +446,7 @@
 
         .rank-company {
             color: var(--text-dim);
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             overflow: hidden;
             text-overflow: ellipsis;
             max-width: 110px;
@@ -388,7 +455,7 @@
         .rank-score {
             font-family: 'Rajdhani', sans-serif;
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: var(--accent);
             text-align: right;
             flex-shrink: 0;
@@ -411,7 +478,6 @@
         .ranking-item.top-2 .rank-pos,
         .ranking-item.top-2 .rank-score {
             color: #e2e8f0;
-            text-shadow: 0 0 10px rgba(226, 232, 240, 0.4);
         }
 
         .ranking-item.top-3 {
@@ -421,23 +487,22 @@
         .ranking-item.top-3 .rank-pos,
         .ranking-item.top-3 .rank-score {
             color: #e69c24;
-            text-shadow: 0 0 10px rgba(205, 127, 50, 0.4);
         }
 
         /* --- Card de Destaque da Posição --- */
         .player-rank-box {
             background: rgba(0, 229, 255, 0.08);
             border: 1px solid rgba(0, 229, 255, 0.4);
-            box-shadow: 0 0 20px rgba(0, 229, 255, 0.15);
-            border-radius: 14px;
-            padding: 8px 16px;
-            margin: 6px 0;
+            border-radius: 12px;
+            padding: 6px 14px;
+            margin: 4px 0;
             text-align: center;
             width: 100%;
+            flex-shrink: 0;
         }
 
         .player-rank-box span {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--text-dim);
             text-transform: uppercase;
             letter-spacing: 1.5px;
@@ -446,35 +511,32 @@
 
         .player-rank-box strong {
             font-family: 'Rajdhani', sans-serif;
-            font-size: 2rem;
+            font-size: 1.8rem;
             color: var(--accent);
             letter-spacing: 2px;
-            text-shadow: 0 0 12px rgba(0, 229, 255, 0.5);
         }
 
-        /* --- Badge de Premiação com SVG --- */
+        /* --- Badge de Premiação --- */
         .badge-prize-box {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            padding: 10px 24px;
-            border-radius: 50px;
+            gap: 10px;
+            padding: 8px 20px;
+            border-radius: 40px;
             font-weight: 800;
-            font-size: 1.1rem;
-            margin: 10px 0;
+            font-size: 1rem;
+            margin: 6px 0;
             text-transform: uppercase;
             letter-spacing: 1px;
+            flex-shrink: 0;
         }
 
-        .badge-prize-box svg {
-            width: 32px;
-            height: 32px;
-        }
+        .badge-prize-box svg { width: 28px; height: 28px; }
 
-        .prize-gold   { background: linear-gradient(135deg, #ffd700, #b8860b); color: #000; box-shadow: 0 0 25px rgba(255, 215, 0, 0.5); }
-        .prize-silver { background: linear-gradient(135deg, #e2e8f0, #94a3b8); color: #000; box-shadow: 0 0 20px rgba(226, 232, 240, 0.4); }
-        .prize-bronze { background: linear-gradient(135deg, #e69c24, #8c4a00); color: #fff; box-shadow: 0 0 20px rgba(205, 127, 50, 0.4); }
+        .prize-gold   { background: linear-gradient(135deg, #ffd700, #b8860b); color: #000; box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+        .prize-silver { background: linear-gradient(135deg, #e2e8f0, #94a3b8); color: #000; box-shadow: 0 0 15px rgba(226, 232, 240, 0.4); }
+        .prize-bronze { background: linear-gradient(135deg, #e69c24, #8c4a00); color: #fff; box-shadow: 0 0 15px rgba(205, 127, 50, 0.4); }
         .prize-none   { background: #1e293b; color: #94a3b8; }
 
         /* --- Screensaver / Standby --- */
@@ -487,7 +549,7 @@
             flex-direction: column;
             justify-content: space-around;
             align-items: center;
-            padding: 40px 20px;
+            padding: 30px 15px;
             cursor: pointer;
         }
 
@@ -500,39 +562,35 @@
 
         .showcase-slider {
             display: flex;
-            gap: 16px;
+            gap: 12px;
             align-items: center;
             justify-content: center;
             width: 100%;
         }
 
         .showcase-item {
-            width: 100px;
-            height: 100px;
+            width: 85px;
+            height: 85px;
             background: #ffffff;
             border: 1px solid var(--surface-border);
-            border-radius: 12px;
+            border-radius: 10px;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 8px;
+            padding: 6px;
         }
 
-        .showcase-item svg {
-            width: 65px;
-            height: 65px;
-        }
+        .showcase-item svg { width: 55px; height: 55px; }
 
         .touch-prompt {
             font-family: 'Rajdhani', sans-serif;
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             color: var(--accent);
             letter-spacing: 3px;
             animation: blinkText 1.5s infinite;
         }
 
-        /* --- Overlay de Contagem Regressiva --- */
+        /* --- Countdown Overlay --- */
         .countdown-overlay {
             position: fixed;
             inset: 0;
@@ -555,26 +613,26 @@
 
         .countdown-title {
             font-family: 'Rajdhani', sans-serif;
-            font-size: 2.2rem;
+            font-size: 2rem;
             font-weight: 700;
             color: #fff;
             letter-spacing: 3px;
             text-transform: uppercase;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             text-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
         }
 
         .countdown-subtitle {
-            font-size: 1.05rem;
+            font-size: 0.95rem;
             color: var(--text-dim);
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             text-align: center;
-            max-width: 320px;
+            max-width: 300px;
         }
 
         .countdown-number {
             font-family: 'Rajdhani', sans-serif;
-            font-size: 7rem;
+            font-size: 6rem;
             font-weight: 800;
             color: var(--accent);
             text-shadow: 0 0 35px var(--accent-glow);
@@ -599,7 +657,7 @@
 
         .memo-banner {
             font-family: 'Rajdhani', sans-serif;
-            font-size: 1.25rem;
+            font-size: 1.15rem;
             font-weight: 700;
             color: var(--accent);
             text-transform: uppercase;
@@ -610,12 +668,19 @@
 </head>
 <body>
 
+<!-- BOTÃO DISCRETO DE TELA CHEIA (FULLSCREEN) -->
+<button class="btn-fullscreen" onclick="toggleFullScreen()" title="Alternar Tela Cheia">
+    <svg id="fs-icon" viewBox="0 0 24 24">
+        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+    </svg>
+</button>
+
 <!-- SCREENSAVER / STANDBY -->
 <div id="screensaver" onclick="dismissScreensaver()">
     <div class="screensaver-logo-box brand-header">
-        <img src="logo.png" alt="Infinity Logo" class="brand-logo" style="height: 110px; margin-bottom: 12px;">
-        <h1 class="title" style="font-size: 3.2rem;">INFINITY<span class="corp-highlight">CORP</span></h1>
-        <p class="brand-subtitle" style="font-size: 0.8rem; margin-top: 6px;">Soluções Corporativas de TI & Outsourcing</p>
+        <img src="logo.png" alt="Infinity Logo" class="brand-logo" style="height: 100px; margin-bottom: 10px;">
+        <h1 class="title" style="font-size: 2.8rem;">INFINITY<span class="corp-highlight">CORP</span></h1>
+        <p class="brand-subtitle" style="font-size: 0.75rem; margin-top: 4px;">Soluções Corporativas de TI & Outsourcing</p>
     </div>
     <div class="showcase-slider" id="showcase-slider"></div>
 
@@ -627,7 +692,7 @@
     <div class="touch-prompt">TOQUE NA TELA PARA JOGAR</div>
 </div>
 
-<!-- OVERLAY DA CONTAGEM REGRESSIVA / PREPARAÇÃO -->
+<!-- OVERLAY DA CONTAGEM REGRESSIVA -->
 <div id="countdown-overlay" class="countdown-overlay">
     <div class="countdown-title">PREPARE-SE!</div>
     <div class="countdown-subtitle">Memorize as cartas do tabuleiro...</div>
@@ -644,7 +709,7 @@
             <p class="brand-subtitle">Soluções Corporativas de TI & Outsourcing</p>
         </div>
 
-        <p style="color: var(--text-dim); font-size: 0.85rem; text-align: center;">
+        <p style="color: var(--text-dim); font-size: 0.8rem; text-align: center;">
             Desafio de 45s: Memorize e conquiste sua premiação.
         </p>
 
@@ -671,7 +736,7 @@
         </div>
     </div>
 
-    <!-- TELA 2: TABULEIRO VERTICAL -->
+    <!-- TELA 2: TABULEIRO -->
     <div id="screen-game" class="screen">
         <div class="hud">
             <div>
@@ -687,26 +752,26 @@
 
     <!-- TELA 3: RESULTADO -->
     <div id="screen-end" class="screen">
-        <h2 class="title" style="font-size: 1.9rem; margin-bottom: 2px;">Obrigado por Jogar com a Gente!</h2>
-        <br>        
+        <h2 class="title" style="font-size: 1.8rem; margin-bottom: 2px;">Obrigado por Jogar!</h2>
+        
         <div class="player-rank-box">
             <span>Sua Posição no Desafio</span>
             <strong id="player-position-display">#-- LUGAR</strong>
         </div>
-        <br>
-        <div id="prize-badge-box" class="badge-prize-box prize-none" style="margin: 4px 0 8px 0;">
+
+        <div id="prize-badge-box" class="badge-prize-box prize-none">
             <span id="prize-icon"></span>
             <span id="prize-text">Sem Premiação</span>
         </div>
 
-        <p id="result-summary" style="color: var(--text-dim); font-size: 0.85rem; margin-bottom: 8px; text-align: center;"></p>
-        <br>
-        <div class="ranking-container" style="margin-top:0;">
+        <p id="result-summary" style="color: var(--text-dim); font-size: 0.8rem; margin-bottom: 4px; text-align: center;"></p>
+
+        <div class="ranking-container">
             <span class="ranking-title-label">Líderes do Desafio</span>
             <div class="ranking-list" id="end-ranking-list"></div>
         </div>
 
-        <button id="btn-next-player" class="btn-action" style="margin-top: 10px;" onclick="backToStart()">
+        <button id="btn-next-player" class="btn-action" style="margin-top: 8px;" onclick="backToStart()">
             Próximo Participante (30s)
         </button>
     </div>
@@ -714,7 +779,7 @@
 </div>
 
 <script>
-    // Catálogo 100% Vetorial Nativo (Garante compatibilidade total em totens e offline)
+    // Catálogo 100% Vetorial
     const CATALOG = [
         { 
             name: "Impressora A4", 
@@ -804,6 +869,19 @@
     let idleTimer = null;
     let endCountdownTimer = null;
     let endCountdownSeconds = 30;
+
+    // --- TOGGLE FULLSCREEN ---
+    function toggleFullScreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(err => {
+                console.log(`Erro ao ativar tela cheia: ${err.message}`);
+            });
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+        }
+    }
 
     function setScreen(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -920,7 +998,7 @@
 
         overlay.classList.add('active');
         let prepCount = 3;
-        countDisplay.style.fontSize = "7rem";
+        countDisplay.style.fontSize = "6rem";
         countDisplay.innerText = prepCount;
 
         const prepInterval = setInterval(() => {
@@ -1183,7 +1261,7 @@
         const ranking = JSON.parse(localStorage.getItem('totem_ranking') || '[]').slice(0, limit);
 
         if (ranking.length === 0) {
-            listEl.innerHTML = '<div class="ranking-item" style="justify-content:center; color: var(--text-dim); padding: 12px;">Seja o primeiro a bater o recorde!</div>';
+            listEl.innerHTML = '<div class="ranking-item" style="justify-content:center; color: var(--text-dim); padding: 10px;">Seja o primeiro a bater o recorde!</div>';
             return;
         }
 
@@ -1283,7 +1361,6 @@
         document.body.removeChild(link);
     }
 
-    // Inicialização
     renderLeaderboards();
     resetIdleTimer();
     fetchOnlineRanking();
